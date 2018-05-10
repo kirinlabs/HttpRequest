@@ -78,8 +78,8 @@ func (r *Request) isJson() bool {
 
 // Build query data
 func (r *Request) buildBody(d map[string]interface{}) (io.Reader, error) {
-	// Get request dose not send body
-	if r.method == "GET" {
+	// GET and DELETE request dose not send body
+	if r.method == "GET" || r.method == "DELETE" {
 		return nil, nil
 	}
 
@@ -110,6 +110,44 @@ func (r *Request) SetTimeout(d time.Duration) {
 	return
 }
 
+// Parse query for GET request
+func parseQuery(url string) ([]string, error) {
+	urlList := strings.Split(url, "?")
+	if len(urlList) < 2 {
+		return make([]string, 0), nil
+	}
+	query := make([]string, 0)
+	for _, val := range strings.Split(urlList[1], "&") {
+		v := strings.Split(val, "=")
+		if len(v) < 2 {
+			return make([]string, 0), errors.New("query parameter error")
+		}
+		query = append(query, fmt.Sprintf("%s=%s", v[0], v[1]))
+	}
+	return query, nil
+}
+
+// Build GET request url
+func buildUrl(url string, data map[string]interface{}) (string, error) {
+	query, err := parseQuery(url)
+	if err != nil {
+		return url, err
+	}
+
+	if data != nil {
+		for k, v := range data {
+			b, err := json.Marshal(v)
+			if err != nil {
+				return url, err
+			}
+			query = append(query, fmt.Sprintf("%s=%s", k, string(b)))
+		}
+	}
+	list := strings.Split(url, "?")
+
+	return fmt.Sprintf("%s?%s", list[0], strings.Join(query, "&")), nil
+}
+
 // Build client
 func (r *Request) buildClient() *http.Client {
 	if r.cli == nil {
@@ -132,8 +170,8 @@ func (r *Request) buildClient() *http.Client {
 }
 
 // Get is a get http request
-func (r *Request) Get(url string) (*Response, error) {
-	return r.send(http.MethodGet, url, nil)
+func (r *Request) Get(url string, data map[string]interface{}) (*Response, error) {
+	return r.send(http.MethodGet, url, data)
 }
 
 // Post is a post http request
@@ -147,20 +185,32 @@ func (r *Request) Put(url string, data map[string]interface{}) (*Response, error
 }
 
 // Delete is a delete http request
-func (r *Request) Delete(url string) (*Response, error) {
-	return r.send(http.MethodDelete, url, nil)
+func (r *Request) Delete(url string, data map[string]interface{}) (*Response, error) {
+	return r.send(http.MethodDelete, url, data)
 }
 
 // Send http request
 func (r *Request) send(method, url string, data map[string]interface{}) (*Response, error) {
+	if method == "" || url == "" {
+		return nil, errors.New("parameter method and url is required")
+	}
+
 	response := Response{}
 	r.cli = r.buildClient()
 	var (
 		err  error
 		body io.Reader
 	)
+
 	method = strings.ToUpper(method)
 	r.method = method
+
+	if method == "GET" || method == "DELETE" {
+		url, err = buildUrl(url, data)
+		if err != nil {
+			return nil, err
+		}
+	}
 
 	body, err = r.buildBody(data)
 
