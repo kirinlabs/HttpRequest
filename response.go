@@ -18,6 +18,7 @@ func (r *Response) StatusCode() int {
 	if r.resp == nil {
 		return 0
 	}
+
 	return r.resp.StatusCode
 }
 
