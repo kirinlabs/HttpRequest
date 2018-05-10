@@ -56,29 +56,29 @@ func main() {
 }
 ```
 
-##Request
+## Request
 
-'''
+```
 -'Get(url string)'
 -'Post(url string,body map[string]interface{})'
 -'Delete(url string)'
 -'Put(url string,body map[string]interface{})'
-'''
+```
 
 
-##Public function
+## Public function
 
-'''
+```
 -'SetHeaders(header map[string]string)'
 -'SetCookies(header map[string]string)'
 -'SetTimeout(d time.Duration)'
-'''
+```
 
 
-##Response
+## Response
 
-'''
+```
 -'Response()'
 -'StatusCode()'
 -'Body()'
-'''
+```
