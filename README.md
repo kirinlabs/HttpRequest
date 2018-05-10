@@ -82,7 +82,7 @@ Delete(url string, body map[string]interface{})
 ```
 
 ```
-Put(url string,body map[string]interface{})
+Put(url string, body map[string]interface{})
 ```
 
 
