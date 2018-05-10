@@ -57,6 +57,7 @@ func main() {
 ```
 
 ##Request
+
 -'Get(url string)'
 -'Post(url string,body map[string]interface{})'
 -'Delete(url string)'
@@ -64,12 +65,14 @@ func main() {
 
 
 ##Public function
+
 -'SetHeaders(header map[string]string)'
 -'SetCookies(header map[string]string)'
 -'SetTimeout(d time.Duration)'
 
 
 ##Response
+
 -'Response()'
 -'StatusCode()'
 -'Body()'
