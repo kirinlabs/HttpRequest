@@ -100,9 +100,9 @@ SetTimeout(d time.Duration)
 ## Response
 
 ```
-Response()
+Response() *http.Response
 
-StatusCode()
+StatusCode() int
 
-Body()
+Body() ([]byte, error)
 ```
