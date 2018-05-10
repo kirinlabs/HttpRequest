@@ -67,14 +67,22 @@ func main() {
 
 ```
 Get(url string, nil)
+
 Get(url string, body map[string]interface{})
+```
 
+```
 Post(url string, body map[string]interface{})
+```
 
+```
 Delete(url string, nil)
-Delete(url string, body map[string]interface{})
 
-Put(url string,body map[string]interface{})
+Delete(url string, body map[string]interface{})
+```
+
+```
+Put(url string, body map[string]interface{})
 ```
 
 
@@ -92,9 +100,9 @@ SetTimeout(d time.Duration)
 ## Response
 
 ```
-Response()
+Response() *http.Response
 
-StatusCode()
+StatusCode() int
 
-Body()
+Body() ([]byte, error)
 ```
