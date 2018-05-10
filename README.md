@@ -33,7 +33,14 @@ func main() {
     req.SetTimeout(5)  //default 30s
 
     /*
-    res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest")
+    res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest",nil)
+
+    res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest",map[string]interface{}{
+         "name":  "jason",
+         "score": 100,
+    })
+
+    Rebuild url to http://127.0.0.1:8000?id=10&title=HttpRequest&name=jason&score=100
     */
 
     res, err := req.Post("http://127.0.0.1:8000", map[string]interface{}{
@@ -59,11 +66,13 @@ func main() {
 ## Request
 
 ```
-Get(url string)
+Get(url string, nil)
+Get(url string, body map[string]interface{})
 
-Post(url string,body map[string]interface{})
+Post(url string, body map[string]interface{})
 
-Delete(url string)
+Delete(url string, nil)
+Delete(url string, body map[string]interface{})
 
 Put(url string,body map[string]interface{})
 ```
