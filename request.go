@@ -1,21 +1,15 @@
 package HttpRequest
 
 import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"strings"
-
-	"bytes"
-
-	"errors"
-
-	"fmt"
-
 	"time"
-
-	"net"
-
-	"github.com/gin-gonic/gin/json"
 )
 
 type Request struct {
