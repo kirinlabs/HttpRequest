@@ -19,7 +19,7 @@ import (
 )
 
 func main() {
-	req := HttpRequest.NewRequest()
+    req := HttpRequest.NewRequest()
 
     req.SetHeaders(map[string]string{
     	"Content-Type": "application/x-www-form-urlencoded",
@@ -87,43 +87,43 @@ func main() {
 ## Request
 
 ```
-Get(url string, nil)
+    Get(url string, nil)
 
-Get(url string, body map[string]interface{})
-```
-
-```
-Post(url string, body map[string]interface{})
+    Get(url string, body map[string]interface{})
 ```
 
 ```
-Delete(url string, nil)
-
-Delete(url string, body map[string]interface{})
+    Post(url string, body map[string]interface{})
 ```
 
 ```
-Put(url string, body map[string]interface{})
+    Delete(url string, nil)
+
+    Delete(url string, body map[string]interface{})
+```
+
+```
+    Put(url string, body map[string]interface{})
 ```
 
 
 ## Public function
 
 ```
-SetHeaders(header map[string]string)
+    SetHeaders(header map[string]string)
 
-SetCookies(header map[string]string)
+    SetCookies(header map[string]string)
 
-SetTimeout(d time.Duration)
+    SetTimeout(d time.Duration)
 ```
 
 
 ## Response
 
 ```
-Response() *http.Response
+    Response() *http.Response
 
-StatusCode() int
+    StatusCode() int
 
-Body() ([]byte, error)
+    Body() ([]byte, error)
 ```
