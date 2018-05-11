@@ -4,9 +4,11 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 )
 
 type Response struct {
+	time int64
 	resp *http.Response
 }
 
@@ -20,6 +22,10 @@ func (r *Response) StatusCode() int {
 	}
 
 	return r.resp.StatusCode
+}
+
+func (r *Response) Time() string {
+	return strconv.Itoa(int(r.time)) + "ms"
 }
 
 func (r *Response) Body() ([]byte, error) {

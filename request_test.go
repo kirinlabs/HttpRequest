@@ -50,16 +50,6 @@ func TestPostRequest(t *testing.T) {
 	for _, v := range test {
 		resp, err = req.Post(localUrl, v)
 		if err != nil {
-			if v == nil {
-				str := "data is empty."
-				if err.Error() != str {
-					t.Error("expected error: "+str, fmt.Sprintf("return error: %s", err.Error()))
-					return
-				}
-				fmt.Println("PASS [expected error: "+str, fmt.Sprintf(", return error: %s]", err.Error()))
-				return
-			}
-
 			t.Error(err)
 			return
 		}

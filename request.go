@@ -18,6 +18,7 @@ type Request struct {
 	debug   bool
 	url     string
 	method  string
+	time    int64
 	timeout time.Duration
 	headers map[string]string
 	cookies map[string]string
@@ -105,26 +106,32 @@ func (r *Request) buildBody(d map[string]interface{}) (io.Reader, error) {
 		return nil, nil
 	}
 
-	if d != nil && len(d) > 0 {
-		if r.isJson() {
-			if b, err := json.Marshal(d); err != nil {
-				return nil, err
-			} else {
-				return bytes.NewReader(b), nil
-			}
-		}
-		data := make([]string, 0)
-		for k, v := range d {
-			b, err := json.Marshal(v)
-			if err != nil {
-				return nil, err
-			}
-			data = append(data, fmt.Sprintf("%s=%s", k, string(b)))
-		}
-		return strings.NewReader(strings.Join(data, "&")), nil
+	if d == nil || len(d) == 0 {
+		return strings.NewReader(""), nil
 	}
 
-	return nil, errors.New("data is empty.")
+	if r.isJson() {
+		if b, err := json.Marshal(d); err != nil {
+			return nil, err
+		} else {
+			return bytes.NewReader(b), nil
+		}
+	}
+
+	data := make([]string, 0)
+	for k, v := range d {
+		if s, ok := v.(string); ok {
+			data = append(data, fmt.Sprintf("%s=%v", k, s))
+			continue
+		}
+		b, err := json.Marshal(v)
+		if err != nil {
+			return nil, err
+		}
+		data = append(data, fmt.Sprintf("%s=%s", k, string(b)))
+	}
+
+	return strings.NewReader(strings.Join(data, "&")), nil
 }
 
 func (r *Request) SetTimeout(d time.Duration) {
@@ -174,6 +181,11 @@ func buildUrl(url string, data map[string]interface{}) (string, error) {
 	return list[0], nil
 }
 
+func (r *Request) elapsedTime(n int64, resp *Response) {
+	end := time.Now().UnixNano() / 1e6
+	resp.time = end - n
+}
+
 func (r *Request) log() {
 	if r.debug {
 		fmt.Printf("[HttpRequest]\n")
@@ -205,16 +217,24 @@ func (r *Request) Delete(url string, data map[string]interface{}) (*Response, er
 
 // Send http request
 func (r *Request) request(method, url string, data map[string]interface{}) (*Response, error) {
+	// Build Response
+	response := &Response{}
+
+	// Start time
+	start := time.Now().UnixNano() / 1e6
+	// Count elapsed time
+	defer r.elapsedTime(start, response)
+
 	if method == "" || url == "" {
 		return nil, errors.New("parameter method and url is required")
 	}
 
+	// Debug infomation
 	defer r.log()
 
 	r.url = url
 	r.data = data
 
-	response := Response{}
 	var (
 		err  error
 		body io.Reader
@@ -254,5 +274,5 @@ func (r *Request) request(method, url string, data map[string]interface{}) (*Res
 
 	response.resp = resp
 
-	return &response, nil
+	return response, nil
 }
