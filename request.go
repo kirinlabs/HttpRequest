@@ -15,6 +15,8 @@ import (
 type Request struct {
 	cli     *http.Client
 	req     *http.Request
+	debug   bool
+	url     string
 	method  string
 	timeout time.Duration
 	headers map[string]string
@@ -26,6 +28,32 @@ type Request struct {
 func NewRequest() *Request {
 	r := &Request{timeout: 30}
 	return r
+}
+
+// Debug model
+func (r *Request) Debug(v bool) {
+	r.debug = v
+}
+
+// Build client
+func (r *Request) buildClient() *http.Client {
+	if r.cli == nil {
+		r.cli = &http.Client{
+			Transport: &http.Transport{
+				Dial: func(network, addr string) (net.Conn, error) {
+					conn, err := net.DialTimeout(network, addr, time.Second*r.timeout)
+					if err != nil {
+						return nil, err
+					}
+					conn.SetDeadline(time.Now().Add(time.Second * r.timeout))
+					return conn, nil
+				},
+				ResponseHeaderTimeout: time.Second * r.timeout,
+				//DisableKeepAlives:     true,
+			},
+		}
+	}
+	return r.cli
 }
 
 // Set headers
@@ -146,65 +174,58 @@ func buildUrl(url string, data map[string]interface{}) (string, error) {
 	return list[0], nil
 }
 
-// Build client
-func (r *Request) buildClient() *http.Client {
-	if r.cli == nil {
-		r.cli = &http.Client{
-			Transport: &http.Transport{
-				Dial: func(network, addr string) (net.Conn, error) {
-					conn, err := net.DialTimeout(network, addr, time.Second*r.timeout)
-					if err != nil {
-						return nil, err
-					}
-					conn.SetDeadline(time.Now().Add(time.Second * r.timeout))
-					return conn, nil
-				},
-				ResponseHeaderTimeout: time.Second * r.timeout,
-				//DisableKeepAlives:     true,
-			},
-		}
+func (r *Request) log() {
+	if r.debug {
+		fmt.Printf("[HttpRequest]\n")
+		fmt.Printf("-------------------------------------------------------------------\n")
+		fmt.Printf("Request: %s %s\nHeaders: %v\nCookies: %v\nTimeout: %ds\nBodyMap: %v\n", r.method, r.url, r.headers, r.cookies, r.timeout, r.data)
+		fmt.Printf("-------------------------------------------------------------------\n\n")
 	}
-	return r.cli
 }
 
 // Get is a get http request
 func (r *Request) Get(url string, data map[string]interface{}) (*Response, error) {
-	return r.send(http.MethodGet, url, data)
+	return r.request(http.MethodGet, url, data)
 }
 
 // Post is a post http request
 func (r *Request) Post(url string, data map[string]interface{}) (*Response, error) {
-	return r.send(http.MethodPost, url, data)
+	return r.request(http.MethodPost, url, data)
 }
 
 // Put is a put http request
 func (r *Request) Put(url string, data map[string]interface{}) (*Response, error) {
-	return r.send(http.MethodPut, url, data)
+	return r.request(http.MethodPut, url, data)
 }
 
 // Delete is a delete http request
 func (r *Request) Delete(url string, data map[string]interface{}) (*Response, error) {
-	return r.send(http.MethodDelete, url, data)
+	return r.request(http.MethodDelete, url, data)
 }
 
 // Send http request
-func (r *Request) send(method, url string, data map[string]interface{}) (*Response, error) {
+func (r *Request) request(method, url string, data map[string]interface{}) (*Response, error) {
 	if method == "" || url == "" {
 		return nil, errors.New("parameter method and url is required")
 	}
 
+	defer r.log()
+
+	r.url = url
+	r.data = data
+
 	response := Response{}
-	r.cli = r.buildClient()
 	var (
 		err  error
 		body io.Reader
 	)
+	r.cli = r.buildClient()
 
 	method = strings.ToUpper(method)
 	r.method = method
 
 	if method == "GET" || method == "DELETE" {
-		url, err = buildUrl(url, data)
+		r.url, err = buildUrl(url, data)
 		if err != nil {
 			return nil, err
 		}
@@ -216,7 +237,7 @@ func (r *Request) send(method, url string, data map[string]interface{}) (*Respon
 		return nil, err
 	}
 
-	r.req, err = http.NewRequest(method, url, body)
+	r.req, err = http.NewRequest(method, r.url, body)
 
 	if err != nil {
 		return nil, err
