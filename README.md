@@ -66,64 +66,64 @@ func main() {
 ## Debug
 
 ```
-    req := HttpRequest.NewRequest()
-    req.Debug(true)       //Default false
+  req := HttpRequest.NewRequest()
+  req.Debug(true)       //Default false
 ```
 
 ```
-    Print in standard output：
+  Print in standard output：
 
-    [HttpRequest]
-    -------------------------------------------------------------------
-    Request: GET http://127.0.0.1:8000?name=iceview&age=19&score=100
-    Headers: map[Content-Type:application/x-www-form-urlencoded]
-    Cookies: map[]
-    Timeout: 30s
-    BodyMap: map[age:19 score:100]
-    -------------------------------------------------------------------
+  [HttpRequest]
+  -------------------------------------------------------------------
+  Request: GET http://127.0.0.1:8000?name=iceview&age=19&score=100
+  Headers: map[Content-Type:application/x-www-form-urlencoded]
+  Cookies: map[]
+  Timeout: 30s
+  BodyMap: map[age:19 score:100]
+  -------------------------------------------------------------------
 ```
 
 
 ## Request
 
 ```
-    Get(url string, nil)
+  Get(url string, nil)
 
-    Get(url string, body map[string]interface{})
-```
-
-```
-    Post(url string, body map[string]interface{})
+  Get(url string, body map[string]interface{})
 ```
 
 ```
-    Delete(url string, nil)
-
-    Delete(url string, body map[string]interface{})
+  Post(url string, body map[string]interface{})
 ```
 
 ```
-    Put(url string, body map[string]interface{})
+  Delete(url string, nil)
+
+  Delete(url string, body map[string]interface{})
+```
+
+```
+  Put(url string, body map[string]interface{})
 ```
 
 
 ## Public function
 
 ```
-    SetHeaders(header map[string]string)
+  SetHeaders(header map[string]string)
 
-    SetCookies(header map[string]string)
+  SetCookies(header map[string]string)
 
-    SetTimeout(d time.Duration)
+  SetTimeout(d time.Duration)
 ```
 
 
 ## Response
 
 ```
-    Response() *http.Response
+  Response() *http.Response
 
-    StatusCode() int
+  StatusCode() int
 
-    Body() ([]byte, error)
+  Body() ([]byte, error)
 ```
