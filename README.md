@@ -126,4 +126,6 @@ func main() {
   StatusCode() int
 
   Body() ([]byte, error)
+
+  Time() string
 ```
