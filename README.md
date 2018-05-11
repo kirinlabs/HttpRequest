@@ -75,7 +75,7 @@ func main() {
 
     [HttpRequest]
     -------------------------------------------------------------------
-    Request: GET http://127.0.0.1:8000?name=jason&age=19&score=100
+    Request: GET http://127.0.0.1:8000?name=iceview&age=19&score=100
     Headers: map[Content-Type:application/x-www-form-urlencoded]
     Cookies: map[]
     Timeout: 30s
