@@ -84,6 +84,15 @@ func main() {
 ```
 
 
+## Send json request
+
+```
+  req.SetHeaders(map[string]string{
+      	"Content-Type": "application/json",
+  })
+
+```
+
 ## Request
 
 ```
