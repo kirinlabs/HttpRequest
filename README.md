@@ -5,7 +5,7 @@ A simple HTTP Request package for golang.
 ## Installation
 
 ```
-go get github.com/iceview/HttpRequest
+go get github.com/kirinlabs/HttpRequest
 ```
 
 ## Example
@@ -14,7 +14,7 @@ go get github.com/iceview/HttpRequest
 package main
 
 import (
-	"github.com/iceview/HttpRequest"
+	"github.com/kirinlabs/HttpRequest"
 	"fmt"
 )
 
