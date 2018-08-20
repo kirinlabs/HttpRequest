@@ -37,10 +37,7 @@ func main() {
 
     req := HttpRequest.NewRequest().Debug(true).SetHeaders(map[string]string{
            "Content-Type": "application/x-www-form-urlencoded",
-    }).SetTimeout(5).SetCookies(map[string]string{
-           "name":      "iceview",
-           "sessionid": "NFLJASDLFIWRLKVLZXJLZVJALFFNASLLXNMVNALWSDFJF3WO",
-    })
+    }).SetTimeout(5)
 
     /*
     res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest",nil)
