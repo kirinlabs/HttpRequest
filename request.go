@@ -32,8 +32,9 @@ func NewRequest() *Request {
 }
 
 // Debug model
-func (r *Request) Debug(v bool) {
+func (r *Request) Debug(v bool) *Request {
 	r.debug = v
+	return r
 }
 
 // Build client
@@ -58,9 +59,9 @@ func (r *Request) buildClient() *http.Client {
 }
 
 // Set headers
-func (r *Request) SetHeaders(h map[string]string) {
+func (r *Request) SetHeaders(h map[string]string) *Request {
 	r.headers = h
-	return
+	return r
 }
 
 // Init headers
@@ -72,9 +73,9 @@ func (r *Request) initHeaders() {
 }
 
 // Set cookies
-func (r *Request) SetCookies(c map[string]string) {
+func (r *Request) SetCookies(c map[string]string) *Request {
 	r.cookies = c
-	return
+	return r
 }
 
 // Init cookies
@@ -134,9 +135,9 @@ func (r *Request) buildBody(d map[string]interface{}) (io.Reader, error) {
 	return strings.NewReader(strings.Join(data, "&")), nil
 }
 
-func (r *Request) SetTimeout(d time.Duration) {
+func (r *Request) SetTimeout(d time.Duration) *Request {
 	r.timeout = d
-	return
+	return r
 }
 
 // Parse query for GET request

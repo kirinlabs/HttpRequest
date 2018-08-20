@@ -2,6 +2,7 @@
 A simple HTTP Request package for golang.
 
 
+
 ## Installation
 
 ```
@@ -31,6 +32,15 @@ func main() {
     })
 
     req.SetTimeout(5)  //default 30s
+
+    or
+
+    req := HttpRequest.NewRequest().Debug(true).SetHeaders(map[string]string{
+           "Content-Type": "application/x-www-form-urlencoded",
+    }).SetTimeout(5).SetCookies(map[string]string{
+           "name":      "iceview",
+           "sessionid": "NFLJASDLFIWRLKVLZXJLZVJALFFNASLLXNMVNALWSDFJF3WO",
+    })
 
     /*
     res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest",nil)
