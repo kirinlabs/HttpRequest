@@ -33,44 +33,62 @@ func main() {
 
     req.SetTimeout(5)  //default 30s
 
-    or
-
+    //Or
     req := HttpRequest.NewRequest().Debug(true).SetHeaders(map[string]string{
            "Content-Type": "application/x-www-form-urlencoded",
     }).SetTimeout(5)
-
-    /*
-    res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest",nil)
-
-    res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest",map[string]interface{}{
-         "name":  "jason",
-         "score": 100,
-    })
-
-    Rebuild url to http://127.0.0.1:8000?id=10&title=HttpRequest&name=jason&score=100
-    */
-
-    res, err := req.Post("http://127.0.0.1:8000", map[string]interface{}{
-    	"id":    10,
-    	"title": "HttpRequest",
-    })
-
-    if err != nil {
-    	log.Println(err)
-    	return
-    }
-
-    body, err := res.Body()
-    if err != nil {
-    	log.Println(err)
-    	return
-    }
-
-    fmt.Println(string(body))
-    
-    fmt.Println(res.Json(body))   //Output json format
 }
 ```
+
+## Get
+
+```
+  res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest",nil)
+
+  res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest",map[string]interface{}{
+       "name":  "jason",
+           "score": 100,
+  })
+
+  //Rebuild url to http://127.0.0.1:8000?id=10&title=HttpRequest&name=jason&score=100
+
+  body, err := res.Body()
+  if err != nil {
+     log.Println(err)
+     return
+  }
+
+  fmt.Println(string(body))
+
+  fmt.Println(res.Json(body))   //Output json format
+```
+
+
+## Post
+
+```
+  res, err := req.Post("http://127.0.0.1:8000", map[string]interface{}{
+      	"id":    10,
+      	"title": "HttpRequest",
+      })
+
+  if err != nil {
+     log.Println(err)
+     return
+  }
+
+  body, err := res.Body()
+  if err != nil {
+     log.Println(err)
+     return
+  }
+
+  fmt.Println(string(body))
+
+  fmt.Println(res.Json(body))   //Output json format
+```
+
+
 
 ## Debug
 
