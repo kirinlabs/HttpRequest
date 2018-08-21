@@ -67,6 +67,8 @@ func main() {
     }
 
     fmt.Println(string(body))
+    
+    fmt.Println(res.Json(body))   //Output json format
 }
 ```
 
@@ -144,4 +146,6 @@ func main() {
   Body() ([]byte, error)
 
   Time() string
+  
+  Json(v []byte) (string,error)
 ```
