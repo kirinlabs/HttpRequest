@@ -27,8 +27,7 @@ func main() {
     })
 
     req.SetCookies(map[string]string{
-    	"name":      "iceview",
-    	"sessionid": "NFLJASDLFIWRLKVLZXJLZVJALFFNASLLXNMVNALWSDFJF3WO",
+    	"name":      "json",
     })
 
     req.SetTimeout(5)  //default 30s
