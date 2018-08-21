@@ -32,10 +32,11 @@ func main() {
 
     req.SetTimeout(5)  //default 30s
 
-    //Or
+    -------------------------------------------------------------------------
     req := HttpRequest.NewRequest().Debug(true).SetHeaders(map[string]string{
            "Content-Type": "application/x-www-form-urlencoded",
     }).SetTimeout(5)
+    -------------------------------------------------------------------------
 }
 ```
 
