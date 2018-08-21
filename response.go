@@ -1,6 +1,7 @@
 package HttpRequest
 
 import (
+	"encoding/json"
 	"errors"
 	"io/ioutil"
 	"net/http"
@@ -46,4 +47,13 @@ func (r *Response) Body() ([]byte, error) {
 	}
 
 	return b, nil
+}
+
+func (r *Response) Json(v []byte) (string, error) {
+	var i interface{}
+	err := json.Unmarshal(v, &i)
+	if err != nil {
+		return "", err
+	}
+	return Json(i), nil
 }
