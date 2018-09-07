@@ -14,18 +14,18 @@ import (
 )
 
 type Request struct {
-	cli             *http.Client
-	req             *http.Request
-	debug           bool
-	url             string
-	method          string
-	time            int64
-	timeout         time.Duration
-	headers         map[string]string
-	cookies         map[string]string
-	data            map[string]interface{}
-	KeepAlives      bool
-	TLSClientConfig *tls.Config
+	cli               *http.Client
+	req               *http.Request
+	debug             bool
+	url               string
+	method            string
+	time              int64
+	timeout           time.Duration
+	headers           map[string]string
+	cookies           map[string]string
+	data              map[string]interface{}
+	disableKeepAlives bool
+	tlsClientConfig   *tls.Config
 }
 
 // Create an instance of the Request
@@ -35,12 +35,12 @@ func NewRequest() *Request {
 }
 
 func (r *Request) DisableKeepAlives(v bool) *Request {
-	r.KeepAlives = v
+	r.disableKeepAlives = v
 	return r
 }
 
 func (r *Request) SetTLSClient(v *tls.Config) *Request {
-	r.TLSClientConfig = v
+	r.tlsClientConfig = v
 	return r
 }
 
@@ -64,8 +64,8 @@ func (r *Request) buildClient() *http.Client {
 					return conn, nil
 				},
 				ResponseHeaderTimeout: time.Second * r.timeout,
-				TLSClientConfig:       r.TLSClientConfig,
-				DisableKeepAlives:     r.KeepAlives,
+				TLSClientConfig:       r.tlsClientConfig,
+				DisableKeepAlives:     r.disableKeepAlives,
 			},
 		}
 	}
