@@ -2,6 +2,7 @@ package HttpRequest
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -13,21 +14,33 @@ import (
 )
 
 type Request struct {
-	cli     *http.Client
-	req     *http.Request
-	debug   bool
-	url     string
-	method  string
-	time    int64
-	timeout time.Duration
-	headers map[string]string
-	cookies map[string]string
-	data    map[string]interface{}
+	cli             *http.Client
+	req             *http.Request
+	debug           bool
+	url             string
+	method          string
+	time            int64
+	timeout         time.Duration
+	headers         map[string]string
+	cookies         map[string]string
+	data            map[string]interface{}
+	KeepAlives      bool
+	TLSClientConfig *tls.Config
 }
 
 // Create an instance of the Request
 func NewRequest() *Request {
 	r := &Request{timeout: 30}
+	return r
+}
+
+func (r *Request) DisableKeepAlives(v bool) *Request {
+	r.KeepAlives = v
+	return r
+}
+
+func (r *Request) SetTLSClient(v *tls.Config) *Request {
+	r.TLSClientConfig = v
 	return r
 }
 
@@ -51,7 +64,8 @@ func (r *Request) buildClient() *http.Client {
 					return conn, nil
 				},
 				ResponseHeaderTimeout: time.Second * r.timeout,
-				//DisableKeepAlives:     true,
+				TLSClientConfig:       r.TLSClientConfig,
+				DisableKeepAlives:     r.KeepAlives,
 			},
 		}
 	}
