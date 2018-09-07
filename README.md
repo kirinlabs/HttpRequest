@@ -22,6 +22,10 @@ import (
 func main() {
     req := HttpRequest.NewRequest()
 
+    req.DisableKeepAlives(false)
+
+    req.SetTLSClient(&tls.Config{InsecureSkipVerify: true}) //Ignore Https certificate validation
+
     req.SetHeaders(map[string]string{
     	"Content-Type": "application/x-www-form-urlencoded",
     })
