@@ -1,21 +1,19 @@
 # HttpRequest
-A simple `HTTP Request` package for golang.
+A simple `HTTP Request` package for golang. `GET` `POST` `DELETE` `PUT`
 
 
 
 # Installation
-
 ```
 go get github.com/kirinlabs/HttpRequest
 ```
 
 # Example
-
 ```go
 package main
 
 import (
-	"github.com/kirinlabs/HttpRequest"
+    "github.com/kirinlabs/HttpRequest"
 )
 
 func main() {
@@ -51,21 +49,18 @@ func main() {
 package main
 
 import (
-	"github.com/kirinlabs/HttpRequest"
+    "github.com/kirinlabs/HttpRequest"
 )
 
 func main() {
-
     // Object-oriented operation mode
     req := HttpRequest.NewRequest().Debug(true).SetHeaders(map[string]string{
            "Content-Type": "application/x-www-form-urlencoded",
     }).SetTimeout(5)
-
 }
 ```
 
 ## Get
-
 ```go
   // Query parameter
   res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest",nil)
@@ -89,7 +84,6 @@ func main() {
 
 
 ## Post
-
 ```go
   // Send post request
   res, err := req.Post("http://127.0.0.1:8000", map[string]interface{}{
@@ -109,7 +103,6 @@ func main() {
 
 
 ## Debug
-
 ```go
   req := HttpRequest.NewRequest()
 
@@ -130,7 +123,6 @@ func main() {
 
 
 ## Send and print json
-
 ```go
 
   // Set header
@@ -149,23 +141,6 @@ func main() {
   print body
 
 ```
-
-## Request
-
-```go
-  Get(url string, nil)
-
-  Get(url string, body map[string]interface{})
-
-  Post(url string, body map[string]interface{})
-
-  Delete(url string, nil)
-
-  Delete(url string, body map[string]interface{})
-
-  Put(url string, body map[string]interface{})
-```
-
 
 ## Public function
 
