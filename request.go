@@ -11,6 +11,8 @@ import (
 	"net/http"
 	"strings"
 	"time"
+	"log"
+	"reflect"
 )
 
 type Request struct {
@@ -180,14 +182,21 @@ func buildUrl(url string, data map[string]interface{}) (string, error) {
 
 	if data != nil {
 		for k, v := range data {
-			b, err := json.Marshal(v)
-			if err != nil {
-				return url, err
+			vv := ""
+			if reflect.TypeOf(v).String() == "string"{
+				vv = v.(string)
+			}else{
+				b, err := json.Marshal(v)
+				if err != nil {
+					return url, err
+				}
+				vv = string(b)
 			}
-			query = append(query, fmt.Sprintf("%s=%s", k, string(b)))
+			query = append(query, fmt.Sprintf("%s=%s", k, vv))
 		}
 	}
 	list := strings.Split(url, "?")
+	log.Println(list,query)
 
 	if len(query) > 0 {
 		return fmt.Sprintf("%s?%s", list[0], strings.Join(query, "&")), nil
@@ -286,7 +295,8 @@ func (r *Request) request(method, url string, data map[string]interface{}) (*Res
 	if err != nil {
 		return nil, err
 	}
-
+	
+	response.url = r.url
 	response.resp = resp
 
 	return response, nil
