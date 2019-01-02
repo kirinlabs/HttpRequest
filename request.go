@@ -196,7 +196,6 @@ func buildUrl(url string, data map[string]interface{}) (string, error) {
 		}
 	}
 	list := strings.Split(url, "?")
-	log.Println(list,query)
 
 	if len(query) > 0 {
 		return fmt.Sprintf("%s?%s", list[0], strings.Join(query, "&")), nil
