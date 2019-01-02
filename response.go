@@ -10,7 +10,7 @@ import (
 
 type Response struct {
 	time int64
-	url string
+	url  string
 	resp *http.Response
 }
 
@@ -64,7 +64,7 @@ func (r *Response) Json() (string, error) {
 
 	err = json.Unmarshal(b, &i)
 	if err != nil {
-		return "", errors.New("Illegal json: "+err.Error())
+		return "", errors.New("Illegal json: " + err.Error())
 	}
 
 	return Json(i), nil

@@ -9,10 +9,9 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"reflect"
 	"strings"
 	"time"
-	"log"
-	"reflect"
 )
 
 type Request struct {
@@ -183,9 +182,9 @@ func buildUrl(url string, data map[string]interface{}) (string, error) {
 	if data != nil {
 		for k, v := range data {
 			vv := ""
-			if reflect.TypeOf(v).String() == "string"{
+			if reflect.TypeOf(v).String() == "string" {
 				vv = v.(string)
-			}else{
+			} else {
 				b, err := json.Marshal(v)
 				if err != nil {
 					return url, err
@@ -294,7 +293,7 @@ func (r *Request) request(method, url string, data map[string]interface{}) (*Res
 	if err != nil {
 		return nil, err
 	}
-	
+
 	response.url = r.url
 	response.resp = resp
 
