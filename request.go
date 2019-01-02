@@ -14,6 +14,7 @@ import (
 	"time"
 )
 
+// Request is the base type for this package
 type Request struct {
 	cli               *http.Client
 	req               *http.Request
@@ -29,29 +30,31 @@ type Request struct {
 	tlsClientConfig   *tls.Config
 }
 
-// Create an instance of the Request
+// NewRequest creates an instance of the Request
 func NewRequest() *Request {
 	r := &Request{timeout: 30}
 	return r
 }
 
+// DisableKeepAlives sets the disableKeepAlives property on Request
 func (r *Request) DisableKeepAlives(v bool) *Request {
 	r.disableKeepAlives = v
 	return r
 }
 
+// SetTLSClient sets the tlsClientConfig property on Request
 func (r *Request) SetTLSClient(v *tls.Config) *Request {
 	r.tlsClientConfig = v
 	return r
 }
 
-// Debug model
+// Debug sets the debug property on Request
 func (r *Request) Debug(v bool) *Request {
 	r.debug = v
 	return r
 }
 
-// Build client
+// buildClient builds the client
 func (r *Request) buildClient() *http.Client {
 	if r.cli == nil {
 		r.cli = &http.Client{
@@ -73,13 +76,13 @@ func (r *Request) buildClient() *http.Client {
 	return r.cli
 }
 
-// Set headers
+// SetHeaders Sets the headers
 func (r *Request) SetHeaders(h map[string]string) *Request {
 	r.headers = h
 	return r
 }
 
-// Init headers
+// initHeaders Inits the headers
 func (r *Request) initHeaders() {
 	r.req.Header.Set("Content-Type", "x-www-form-urlencoded")
 	for k, v := range r.headers {
@@ -87,13 +90,13 @@ func (r *Request) initHeaders() {
 	}
 }
 
-// Set cookies
+// SetCookies can set a cookies
 func (r *Request) SetCookies(c map[string]string) *Request {
 	r.cookies = c
 	return r
 }
 
-// Init cookies
+// initCookies Inits the cookies
 func (r *Request) initCookies() {
 	for k, v := range r.cookies {
 		r.req.AddCookie(&http.Cookie{
@@ -103,7 +106,7 @@ func (r *Request) initCookies() {
 	}
 }
 
-// Check application/json
+// isJson Checks if the application/json headers exists
 func (r *Request) isJson() bool {
 	if len(r.headers) > 0 {
 		for _, v := range r.headers {
@@ -115,7 +118,7 @@ func (r *Request) isJson() bool {
 	return false
 }
 
-// Build query data
+// buildBody Builds the query data
 func (r *Request) buildBody(d map[string]interface{}) (io.Reader, error) {
 	// GET and DELETE request dose not send body
 	if r.method == "GET" || r.method == "DELETE" {
@@ -150,12 +153,13 @@ func (r *Request) buildBody(d map[string]interface{}) (io.Reader, error) {
 	return strings.NewReader(strings.Join(data, "&")), nil
 }
 
+// SetTimeout sets the timeout property of the Request
 func (r *Request) SetTimeout(d time.Duration) *Request {
 	r.timeout = d
 	return r
 }
 
-// Parse query for GET request
+// parseQuery parses a query for a GET request
 func parseQuery(url string) ([]string, error) {
 	urlList := strings.Split(url, "?")
 	if len(urlList) < 2 {
@@ -172,7 +176,7 @@ func parseQuery(url string) ([]string, error) {
 	return query, nil
 }
 
-// Build GET request url
+// buildUrl builds a GET request url
 func buildUrl(url string, data map[string]interface{}) (string, error) {
 	query, err := parseQuery(url)
 	if err != nil {
@@ -203,11 +207,13 @@ func buildUrl(url string, data map[string]interface{}) (string, error) {
 	return list[0], nil
 }
 
+// elapsedTime calculates the elapsed time
 func (r *Request) elapsedTime(n int64, resp *Response) {
 	end := time.Now().UnixNano() / 1e6
 	resp.time = end - n
 }
 
+// log logs a request when in debug mode
 func (r *Request) log() {
 	if r.debug {
 		fmt.Printf("[HttpRequest]\n")
@@ -237,7 +243,7 @@ func (r *Request) Delete(url string, data map[string]interface{}) (*Response, er
 	return r.request(http.MethodDelete, url, data)
 }
 
-// Send http request
+// request sends a http request
 func (r *Request) request(method, url string, data map[string]interface{}) (*Response, error) {
 	// Build Response
 	response := &Response{}

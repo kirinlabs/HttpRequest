@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 )
 
+// Export converts v into a nice json stringified output
 func Export(v interface{}) string {
 	b, err := json.Marshal(v)
 	if err != nil {
@@ -18,6 +19,7 @@ func Export(v interface{}) string {
 	return buf.String()
 }
 
+// Json converts v into a nice json stringified output
 func Json(v interface{}) string {
 	return Export(v)
 }
