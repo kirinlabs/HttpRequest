@@ -138,7 +138,6 @@ func main() {
      return
   }
 
-  print body
 
 ```
 
