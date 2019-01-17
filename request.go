@@ -12,6 +12,8 @@ import (
 	"strings"
 	"time"
 	"reflect"
+	"mime/multipart"
+	"os"
 )
 
 type Request struct {
@@ -237,6 +239,11 @@ func (r *Request) Delete(url string, data map[string]interface{}) (*Response, er
 	return r.request(http.MethodDelete, url, data)
 }
 
+// Upload file
+func (r *Request) Upload(url, filename, fileinput string) (*Response, error) {
+	return r.sendFile(url,filename,fileinput)
+}
+
 // Send http request
 func (r *Request) request(method, url string, data map[string]interface{}) (*Response, error) {
 	// Build Response
@@ -294,6 +301,73 @@ func (r *Request) request(method, url string, data map[string]interface{}) (*Res
 		return nil, err
 	}
 	
+	response.url = r.url
+	response.resp = resp
+
+	return response, nil
+}
+
+// Send file
+func (r *Request) sendFile(url, filename, fileinput string) (*Response, error) {
+	if url == "" {
+		return nil, errors.New("parameter url is required")
+	}
+
+	fileBuffer := &bytes.Buffer{}
+	bodyWriter := multipart.NewWriter(fileBuffer)
+	fileWriter, er := bodyWriter.CreateFormFile(fileinput, filename)
+	if er != nil {
+		return nil,er
+	}
+
+	f, er := os.Open(filename)
+	if er != nil {
+		return nil,er
+	}
+	defer f.Close()
+
+	_, er = io.Copy(fileWriter, f)
+	if er != nil {
+		return nil,er
+	}
+
+	contentType := bodyWriter.FormDataContentType()
+	bodyWriter.Close()
+
+	// Build Response
+	response := &Response{}
+
+	// Start time
+	start := time.Now().UnixNano() / 1e6
+	// Count elapsed time
+	defer r.elapsedTime(start, response)
+
+	// Debug infomation
+	defer r.log()
+
+	r.url = url
+	r.data = nil
+
+	var (
+		err  error
+	)
+	r.cli = r.buildClient()
+	r.method = "POST"
+
+	r.req, err = http.NewRequest(r.method, r.url, fileBuffer)
+	if err != nil {
+		return nil, err
+	}
+
+	r.initHeaders()
+	r.initCookies()
+	r.req.Header.Set("Content-Type",contentType)
+
+	resp, err := r.cli.Do(r.req)
+	if err != nil {
+		return nil, err
+	}
+
 	response.url = r.url
 	response.resp = resp
 

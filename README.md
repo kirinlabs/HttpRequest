@@ -101,6 +101,22 @@ func main() {
 ```
 
 
+## Upload
+```go
+  <!--
+   Params: url, filename, fileinput
+   -->
+  res, err := req.Upload("http://127.0.0.1:8000/upload", "/root/demo.txt","uploadFile")
+
+  body, err := res.Body()
+  if err != nil {
+     log.Println(err)
+     return
+  }
+
+  return string(body)
+```
+
 
 ## Debug
 ```go
