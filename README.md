@@ -146,6 +146,11 @@ func main() {
       "Content-Type": "application/json",
   })
 
+  // Send post
+  res, err := req.Post("http://127.0.0.1:8000", map[string]interface{}{
+        	"id":    10,
+        	"title": "HttpRequest",
+        })
 
   // Print json format
   body, err := res.Json()
