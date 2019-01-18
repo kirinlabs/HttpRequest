@@ -57,6 +57,8 @@ func main() {
     req := HttpRequest.NewRequest().Debug(true).SetHeaders(map[string]string{
            "Content-Type": "application/x-www-form-urlencoded",
     }).SetTimeout(5)
+
+    res,err := HttpRequest.NewRequest().Get("http://127.0.0.1:8000?id=10&title=HttpRequest",nil)
 }
 ```
 
@@ -158,7 +160,6 @@ func main() {
      log.Println(err)
      return
   }
-
 
 ```
 
