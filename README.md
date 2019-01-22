@@ -148,7 +148,7 @@ if err != nil {
 
 ### Public function
 
-Request
+#### Request
 ```go
 NewRequest()
 Debug(flag bool)
@@ -159,12 +159,36 @@ DisableKeepAlives(flag bool)
 SetTLSClient(v *tls.Config)
 ```
 
-Response
-```go
+#### Response
+
 Response() *http.Response
+```go
+res, err := req.Post("http://127.0.0.1:8000/",nil) //res is a http.Response object
+```
+
 StatusCode() int
+```go
+res.StatusCode()
+```
+
 Body() ([]byte, error)
+```go
+body, err := res.Body()
+log.Println(string(body))
+```
+
 Time() string
+```go
+res.Time()  //ms
+```
+
 Json() (string,error)
+```go
+body, err := res.Json() //Format the json return value
+log.Println(body)
+```
+
 Url() string
+```go
+res.Url()  //return the requested url
 ```
