@@ -146,20 +146,7 @@ if err != nil {
 }
 ```
 
-### Public function
-
-#### Request
-```go
-NewRequest()
-Debug(flag bool)
-SetHeaders(header map[string]string)
-SetCookies(header map[string]string)
-SetTimeout(d time.Duration)
-DisableKeepAlives(flag bool)
-SetTLSClient(v *tls.Config)
-```
-
-#### Response
+### Response
 
 Response() *http.Response
 ```go
