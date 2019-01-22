@@ -68,7 +68,6 @@ res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest",map[string]i
 })
 body, err := res.Body()
 if err != nil {
-    log.Println(err)
     return
 }
 return string(body)
@@ -84,7 +83,6 @@ res, err := req.Post("http://127.0.0.1:8000", map[string]interface{}{
 })
 body, err := res.Body()
 if err != nil {
-    log.Println(err)
     return
 }
 return string(body)
@@ -98,7 +96,6 @@ Params: url, filename, fileinput
 res, err := req.Upload("http://127.0.0.1:8000/upload", "/root/demo.txt","uploadFile")
 body, err := res.Body()
 if err != nil {
-    log.Println(err)
     return
 }
 return string(body)
@@ -145,7 +142,6 @@ Print JSON
 ```go
 body, err := res.Json()
 if err != nil {
-   log.Println(err)
    return
 }
 ```
