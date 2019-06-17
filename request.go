@@ -33,7 +33,11 @@ type Request struct {
 
 // Create an instance of the Request
 func NewRequest() *Request {
-	r := &Request{timeout: 30}
+	r := &Request{
+		timeout: 30,
+		headers: map[string]string{},
+		cookies: map[string]string{},
+	}
 	return r
 }
 
@@ -77,7 +81,11 @@ func (r *Request) buildClient() *http.Client {
 
 // Set headers
 func (r *Request) SetHeaders(h map[string]string) *Request {
-	r.headers = h
+	if h!=nil||len(h)>0{
+		for k,v:=range h{
+			r.headers[k] = v
+		}
+	}
 	return r
 }
 
@@ -91,7 +99,11 @@ func (r *Request) initHeaders() {
 
 // Set cookies
 func (r *Request) SetCookies(c map[string]string) *Request {
-	r.cookies = c
+	if c!=nil||len(c)>0{
+		for k,v:=range c{
+			r.cookies[k] = v
+		}
+	}
 	return r
 }
 

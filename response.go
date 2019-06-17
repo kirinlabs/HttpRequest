@@ -3,14 +3,14 @@ package HttpRequest
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
-	"strconv"
 )
 
 type Response struct {
 	time int64
-	url string
+	url  string
 	resp *http.Response
 }
 
@@ -26,7 +26,7 @@ func (r *Response) StatusCode() int {
 }
 
 func (r *Response) Time() string {
-	return strconv.Itoa(int(r.time)) + "ms"
+	return fmt.Sprintf("%dms", r.time)
 }
 
 func (r *Response) Url() string {
@@ -64,7 +64,7 @@ func (r *Response) Json() (string, error) {
 
 	err = json.Unmarshal(b, &i)
 	if err != nil {
-		return "", errors.New("Illegal json: "+err.Error())
+		return "", errors.New("Illegal json: " + err.Error())
 	}
 
 	return Json(i), nil
