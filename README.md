@@ -29,7 +29,8 @@ Set headers
 ```go
 req.SetHeaders(map[string]string{
     "Content-Type": "application/x-www-form-urlencoded",
-}).SetHeaders(map[string]string{
+})
+req.SetHeaders(map[string]string{
     "Source":"api",
 })
 ```
@@ -38,7 +39,8 @@ Set cookies
 ```go
 req.SetCookies(map[string]string{
     "name":"json",
-}).SetCookies(map[string]string{
+})
+req.SetCookies(map[string]string{
     "age":"19",
 })
 ```
