@@ -198,3 +198,8 @@ Url() string
 ```go
 res.Url()  //return the requested url
 ```
+
+Headers() map[string]string
+```go
+res.Headers()  //return the response headers
+```
