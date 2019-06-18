@@ -329,7 +329,6 @@ func (r *Request) request(method, url string, data ...interface{}) (*Response, e
 	}
 
 	r.req, err = http.NewRequest(method, r.url, body)
-
 	if err != nil {
 		return nil, err
 	}
@@ -338,7 +337,6 @@ func (r *Request) request(method, url string, data ...interface{}) (*Response, e
 	r.initCookies()
 
 	resp, err := r.cli.Do(r.req)
-
 	if err != nil {
 		return nil, err
 	}
