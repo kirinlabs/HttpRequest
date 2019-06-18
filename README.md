@@ -141,6 +141,13 @@ Set header
 ```go
  req.SetHeaders(map[string]string{"Content-Type": "application/json"})
 ```
+Or
+```go
+ req.Json().Post("http://127.0.0.1:8000", map[string]interface{}{
+    "id":    10,
+    "title": "HttpRequest",
+ })
+```
 
 Post request
 ```go

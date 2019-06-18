@@ -129,6 +129,11 @@ func (r *Request) isJson() bool {
 	return false
 }
 
+func (r *Request) Json() *Request {
+	r.SetHeaders(map[string]string{"Content-Type": "application/json"})
+	return r
+}
+
 // Build query data
 func (r *Request) buildBody(d ...interface{}) (io.Reader, error) {
 	// GET and DELETE request dose not send body
@@ -296,9 +301,9 @@ func (r *Request) request(method, url string, data ...interface{}) (*Response, e
 	defer r.log()
 
 	r.url = url
-	if len(data)>0{
+	if len(data) > 0 {
 		r.data = data[0]
-	}else{
+	} else {
 		r.data = ""
 	}
 
