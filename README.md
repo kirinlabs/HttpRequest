@@ -29,8 +29,11 @@ Set headers
 ```go
 req.SetHeaders(map[string]string{
     "Content-Type": "application/x-www-form-urlencoded",
-}).SetHeaders(map[string]string{
-	"Source":"api",
+    "Connection": "keep-alive",
+})
+
+req.SetHeaders(map[string]string{
+    "Source":"api",
 })
 ```
 
@@ -38,8 +41,11 @@ Set cookies
 ```go
 req.SetCookies(map[string]string{
     "name":"json",
-}).SetCookies(map[string]string{
-	"age":"19",
+    "token":"",
+})
+
+req.SetCookies(map[string]string{
+    "age":"19",
 })
 ```
 
@@ -50,16 +56,19 @@ req.SetTimeout(5)  //default 30s
 
 Object-oriented operation mode
 ```go
-req := HttpRequest.NewRequest().Debug(true).SetHeaders(map[string]string{
-    "Content-Type": "application/x-www-form-urlencoded",
-}).SetTimeout(5)
-res,err := HttpRequest.NewRequest().Get("http://127.0.0.1:8000?id=10&title=HttpRequest")
+req := HttpRequest.NewRequest().
+	Debug(true).
+	SetHeaders(map[string]string{
+	    "Content-Type": "application/x-www-form-urlencoded",
+	}).SetTimeout(5)
+res,err := HttpRequest.NewRequest().Get("http://127.0.0.1")
 ```
 
 ### GET
 
 Query parameter
 ```go
+res, err := req.Get("http://127.0.0.1:8000")
 res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest")
 res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest",nil)
 res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest","address=beijing")
@@ -83,6 +92,7 @@ return string(body)
 ### POST
 
 ```go
+res, err := req.Post("http://127.0.0.1:8000")
 res, err := req.Post("http://127.0.0.1:8000", "body content")
 res, err := req.Post("http://127.0.0.1:8000", "{\"id\":10,\"title\":\"HttpRequest\"}")
 res, err := req.Post("http://127.0.0.1:8000", map[string]interface{}{
@@ -137,6 +147,13 @@ Set header
 ```go
  req.SetHeaders(map[string]string{"Content-Type": "application/json"})
 ```
+Or
+```go
+ req.Json().Post("http://127.0.0.1:8000", map[string]interface{}{
+    "id":    10,
+    "title": "HttpRequest",
+ })
+```
 
 Post request
 ```go
@@ -186,4 +203,9 @@ log.Println(body)
 Url() string
 ```go
 res.Url()  //return the requested url
+```
+
+Headers() map[string]string
+```go
+res.Headers()  //return the response headers
 ```

@@ -33,6 +33,18 @@ func (r *Response) Url() string {
 	return r.url
 }
 
+func (r *Response) Headers() map[string]string {
+	headers := make(map[string]string)
+	for k,v:=range r.resp.Header{
+		if len(v)>0{
+			headers[k] = v[len(v)-1]
+		}else{
+			headers[k] = ""
+		}
+	}
+	return headers
+}
+
 func (r *Response) Body() ([]byte, error) {
 	defer r.resp.Body.Close()
 
@@ -64,7 +76,7 @@ func (r *Response) Json() (string, error) {
 
 	err = json.Unmarshal(b, &i)
 	if err != nil {
-		return "", errors.New("Illegal json: " + err.Error())
+		return "", errors.New("illegal json: " + err.Error())
 	}
 
 	return Json(i), nil
