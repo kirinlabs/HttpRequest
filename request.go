@@ -18,7 +18,6 @@ import (
 
 type Request struct {
 	cli               *http.Client
-	req               *http.Request
 	debug             bool
 	url               string
 	method            string
@@ -90,10 +89,10 @@ func (r *Request) SetHeaders(h map[string]string) *Request {
 }
 
 // Init headers
-func (r *Request) initHeaders() {
-	r.req.Header.Set("Content-Type", "x-www-form-urlencoded")
+func (r *Request) initHeaders(req *http.Request) {
+	req.Header.Set("Content-Type", "x-www-form-urlencoded")
 	for k, v := range r.headers {
-		r.req.Header.Set(k, v)
+		req.Header.Set(k, v)
 	}
 }
 
@@ -108,9 +107,9 @@ func (r *Request) SetCookies(c map[string]string) *Request {
 }
 
 // Init cookies
-func (r *Request) initCookies() {
+func (r *Request) initCookies(req *http.Request) {
 	for k, v := range r.cookies {
-		r.req.AddCookie(&http.Cookie{
+		req.AddCookie(&http.Cookie{
 			Name:  k,
 			Value: v,
 		})
@@ -304,6 +303,7 @@ func (r *Request) request(method, url string, data ...interface{}) (*Response, e
 
 	var (
 		err  error
+		req *http.Request
 		body io.Reader
 	)
 	r.cli = r.buildClient()
@@ -323,22 +323,21 @@ func (r *Request) request(method, url string, data ...interface{}) (*Response, e
 		return nil, err
 	}
 
-	r.req, err = http.NewRequest(method, r.url, body)
+	req, err = http.NewRequest(method, r.url, body)
+	if err != nil {
+		return nil, err
+	}
+
+	r.initHeaders(req)
+	r.initCookies(req)
+
+	resp, err := r.cli.Do(req)
 
 	if err != nil {
 		return nil, err
 	}
 
-	r.initHeaders()
-	r.initCookies()
-
-	resp, err := r.cli.Do(r.req)
-
-	if err != nil {
-		return nil, err
-	}
-
-	response.url = r.url
+	response.url = url
 	response.resp = resp
 
 	return response, nil
@@ -387,20 +386,21 @@ func (r *Request) sendFile(url, filename, fileinput string) (*Response, error) {
 
 	var (
 		err error
+		req *http.Request
 	)
 	r.cli = r.buildClient()
 	r.method = "POST"
 
-	r.req, err = http.NewRequest(r.method, r.url, fileBuffer)
+	req, err = http.NewRequest(r.method, r.url, fileBuffer)
 	if err != nil {
 		return nil, err
 	}
 
-	r.initHeaders()
-	r.initCookies()
-	r.req.Header.Set("Content-Type", contentType)
+	r.initHeaders(req)
+	r.initCookies(req)
+	req.Header.Set("Content-Type", contentType)
 
-	resp, err := r.cli.Do(r.req)
+	resp, err := r.cli.Do(req)
 	if err != nil {
 		return nil, err
 	}
