@@ -13,6 +13,7 @@ go get github.com/kirinlabs/HttpRequest
 Create request object
 ```go
 req := HttpRequest.NewRequest()
+req := HttpRequest.NewRequest().Debug(true).DisableKeepAlives(false)
 ```
 
 Keep Alives
@@ -72,6 +73,9 @@ res, err := req.Get("http://127.0.0.1:8000")
 res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest")
 res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest",nil)
 res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest","address=beijing")
+
+res, err := HttpRequest.Get("http://127.0.0.1:8000")
+res, err := HttpRequest.Debug(true).SetHeaders(map[string]string{}).Get("http://127.0.0.1:8000")
 ```
 
 
@@ -81,10 +85,12 @@ res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest",map[string]i
     "name":  "jason",
     "score": 100,
 })
+
 body, err := res.Body()
 if err != nil {
     return
 }
+
 return string(body)
 ```
 
@@ -104,6 +110,10 @@ if err != nil {
     return
 }
 return string(body)
+
+res, err := HttpRequest.Post("http://127.0.0.1:8000")
+res, err := HttpRequest.JSON().Post("http://127.0.0.1:8000",map[string]interface{}{"title":"github"})
+res, err := HttpRequest.Debug(true).SetHeaders(map[string]string{}).JSON().Post("http://127.0.0.1:8000","{\"title\":\"github\"}")
 ```
 
 
