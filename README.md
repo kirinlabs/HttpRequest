@@ -13,7 +13,7 @@ go get github.com/kirinlabs/HttpRequest
 Create request object
 ```go
 req := HttpRequest.NewRequest()
-req := HttpRequest.NewRequest().Debug(true).DisableKeepAlives(false)
+req := HttpRequest.NewRequest().Debug(true).DisableKeepAlives(false).SetTimeout(5)
 ```
 
 Keep Alives
