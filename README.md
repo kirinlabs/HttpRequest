@@ -149,7 +149,7 @@ Set header
 ```
 Or
 ```go
- req.Json().Post("http://127.0.0.1:8000", map[string]interface{}{
+ req.JSON().Post("http://127.0.0.1:8000", map[string]interface{}{
     "id":    10,
     "title": "HttpRequest",
  })
@@ -208,4 +208,27 @@ res.Url()  //return the requested url
 Headers() map[string]string
 ```go
 res.Headers()  //return the response headers
+```
+
+
+### Advanced
+GET
+```go
+import "github.com/kirinlabs/HttpRequest"
+   
+res,err := HttpRequest.Get("http://127.0.0.1:8000/")
+res,err := HttpRequest.Get("http://127.0.0.1:8000/","title=github")
+res,err := HttpRequest.Get("http://127.0.0.1:8000/?title=github")
+res,err := HttpRequest.Debug(true).JSON().Get("http://127.0.0.1:8000/")
+```
+
+POST
+```go
+import "github.com/kirinlabs/HttpRequest"
+   
+res,err := HttpRequest.Post("http://127.0.0.1:8000/")
+res,err := HttpRequest.SetHeaders(map[string]string{
+	"title":"github",
+}).Post("http://127.0.0.1:8000/")
+res,err := HttpRequest.Debug(true).JSON().Post("http://127.0.0.1:8000/")
 ```

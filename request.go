@@ -30,16 +30,6 @@ type Request struct {
 	tlsClientConfig   *tls.Config
 }
 
-// Create an instance of the Request
-func NewRequest() *Request {
-	r := &Request{
-		timeout: 30,
-		headers: map[string]string{},
-		cookies: map[string]string{},
-	}
-	return r
-}
-
 func (r *Request) DisableKeepAlives(v bool) *Request {
 	r.disableKeepAlives = v
 	return r
@@ -79,9 +69,9 @@ func (r *Request) buildClient() *http.Client {
 }
 
 // Set headers
-func (r *Request) SetHeaders(h map[string]string) *Request {
-	if h != nil || len(h) > 0 {
-		for k, v := range h {
+func (r *Request) SetHeaders(headers map[string]string) *Request {
+	if headers != nil || len(headers) > 0 {
+		for k, v := range headers {
 			r.headers[k] = v
 		}
 	}
@@ -97,9 +87,9 @@ func (r *Request) initHeaders(req *http.Request) {
 }
 
 // Set cookies
-func (r *Request) SetCookies(c map[string]string) *Request {
-	if c != nil || len(c) > 0 {
-		for k, v := range c {
+func (r *Request) SetCookies(cookies map[string]string) *Request {
+	if cookies != nil || len(cookies) > 0 {
+		for k, v := range cookies {
 			r.cookies[k] = v
 		}
 	}
@@ -128,7 +118,7 @@ func (r *Request) isJson() bool {
 	return false
 }
 
-func (r *Request) Json() *Request {
+func (r *Request) JSON() *Request {
 	r.SetHeaders(map[string]string{"Content-Type": "application/json"})
 	return r
 }
@@ -300,15 +290,15 @@ func (r *Request) request(method, url string, data ...interface{}) (*Response, e
 	defer r.log()
 
 	r.url = url
-	if len(data)>0{
+	if len(data) > 0 {
 		r.data = data[0]
-	}else{
+	} else {
 		r.data = ""
 	}
 
 	var (
 		err  error
-		req *http.Request
+		req  *http.Request
 		body io.Reader
 	)
 	r.cli = r.buildClient()
@@ -317,10 +307,11 @@ func (r *Request) request(method, url string, data ...interface{}) (*Response, e
 	r.method = method
 
 	if method == "GET" || method == "DELETE" {
-		r.url, err = buildUrl(url, data...)
+		url, err = buildUrl(url, data...)
 		if err != nil {
 			return nil, err
 		}
+		r.url = url
 	}
 
 	body, err = r.buildBody(data...)
@@ -328,7 +319,7 @@ func (r *Request) request(method, url string, data ...interface{}) (*Response, e
 		return nil, err
 	}
 
-	req, err = http.NewRequest(method, r.url, body)
+	req, err = http.NewRequest(method, url, body)
 	if err != nil {
 		return nil, err
 	}
@@ -396,7 +387,7 @@ func (r *Request) sendFile(url, filename, fileinput string) (*Response, error) {
 	r.cli = r.buildClient()
 	r.method = "POST"
 
-	req, err = http.NewRequest(r.method, r.url, fileBuffer)
+	req, err = http.NewRequest(r.method, url, fileBuffer)
 	if err != nil {
 		return nil, err
 	}
@@ -410,7 +401,7 @@ func (r *Request) sendFile(url, filename, fileinput string) (*Response, error) {
 		return nil, err
 	}
 
-	response.url = r.url
+	response.url = url
 	response.resp = resp
 
 	return response, nil
