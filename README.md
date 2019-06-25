@@ -244,3 +244,31 @@ res,err := HttpRequest.SetHeaders(map[string]string{
 }).Post("http://127.0.0.1:8000/")
 res,err := HttpRequest.Debug(true).JSON().Post("http://127.0.0.1:8000/")
 ```
+
+
+### Example
+```go
+import "github.com/kirinlabs/HttpRequest"
+   
+res,err := HttpRequest.Get("http://127.0.0.1:8000/")
+res,err := HttpRequest.Get("http://127.0.0.1:8000/","title=github")
+res,err := HttpRequest.Get("http://127.0.0.1:8000/?title=github")
+res,err := HttpRequest.Get("http://127.0.0.1:8000/",map[string]interface{}{
+	"title":"github",
+})
+res,err := HttpRequest.Debug(true).JSON().SetHeaders(map[string]string{
+	"source":"api",
+}).SetCookies(map[string]string{
+	"name":"httprequest",
+}).Post("http://127.0.0.1:8000/")
+
+
+//Or
+req := HttpRequest.NewRequest()
+req := req.Debug(true).SetHeaders()
+res,err := req.Debug(true).JSON().SetHeaders(map[string]string{
+    "source":"api",
+}).SetCookies(map[string]string{
+    "name":"httprequest",
+}).Post("http://127.0.0.1:8000/")
+```
