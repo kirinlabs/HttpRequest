@@ -100,7 +100,7 @@ return string(body)
 ```go
 res, err := req.Post("http://127.0.0.1:8000")
 res, err := req.Post("http://127.0.0.1:8000", "title=github&type=1")
-res, err := req.Post("http://127.0.0.1:8000", "{\"id\":10,\"title\":\"HttpRequest\"}")
+res, err := req.JSON().Post("http://127.0.0.1:8000", "{\"id\":10,\"title\":\"HttpRequest\"}")
 res, err := req.Post("http://127.0.0.1:8000", map[string]interface{}{
     "id":    10,
     "title": "HttpRequest",
@@ -159,10 +159,12 @@ Set header
 ```
 Or
 ```go
- req.JSON().Post("http://127.0.0.1:8000", map[string]interface{}{
+req.JSON().Post("http://127.0.0.1:8000", map[string]interface{}{
     "id":    10,
-    "title": "HttpRequest",
- })
+    "title": "github",
+})
+
+req.JSON().Post("http://127.0.0.1:8000", "{\"title\":\"github\",\"id\":10}")
 ```
 
 Post request
