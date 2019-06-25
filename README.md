@@ -99,7 +99,7 @@ return string(body)
 
 ```go
 res, err := req.Post("http://127.0.0.1:8000")
-res, err := req.Post("http://127.0.0.1:8000", "body content")
+res, err := req.Post("http://127.0.0.1:8000", "title=github&type=1")
 res, err := req.Post("http://127.0.0.1:8000", "{\"id\":10,\"title\":\"HttpRequest\"}")
 res, err := req.Post("http://127.0.0.1:8000", map[string]interface{}{
     "id":    10,
