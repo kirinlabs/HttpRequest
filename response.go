@@ -36,10 +36,10 @@ func (r *Response) Url() string {
 
 func (r *Response) Headers() map[string]string {
 	headers := make(map[string]string)
-	for k, v := range r.resp.Header {
-		if len(v) > 0 {
+	for k,v:=range r.resp.Header{
+		if len(v)>0{
 			headers[k] = v[len(v)-1]
-		} else {
+		}else{
 			headers[k] = ""
 		}
 	}
