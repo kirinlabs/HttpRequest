@@ -175,9 +175,10 @@ res, err := req.Post("http://127.0.0.1:8000", map[string]interface{}{
 })
 ```
 
-Print JSON
+Unmarshal JSON
 ```go
-body, err := res.Json()
+var u User
+err := res.Json(&u)
 if err != nil {
    return
 }
@@ -206,10 +207,24 @@ Time() string
 res.Time()  //ms
 ```
 
-Json() (string,error)
+Json(v interface{}) error
 ```go
-body, err := res.Json() //Format the json return value
-log.Println(body)
+var u User
+err := res.Json(&u) //Format the json
+log.Println(u)
+```
+
+JsonMap() (map[string]interface{},error)
+```go
+
+m,err := res.JsonMap() //Format the json return map
+log.Println(u)
+```
+
+JsonString() (string,error)
+```go
+s,err := res.JsonString() //Format the json return string
+log.Println(s)
 ```
 
 Url() string
