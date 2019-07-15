@@ -221,10 +221,27 @@ Time() string
 res.Time()  //ms
 ```
 
-Json() (string,error)
+Print formatted JSON
 ```go
-body, err := res.Json() //Format the json return value
-log.Println(body)
+str, err := res.Export()
+if err != nil {
+   return
+}
+```
+
+Unmarshal JSON
+```go
+var u User
+err := res.Json(&u)
+if err != nil {
+   return err
+}
+
+var m map[string]interface{}
+err := res.Json(&m)
+if err != nil {
+   return err
+}
 ```
 
 Url() string
