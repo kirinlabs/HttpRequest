@@ -175,11 +175,26 @@ res, err := req.Post("http://127.0.0.1:8000", map[string]interface{}{
 })
 ```
 
-Print JSON
+Print formatted JSON
 ```go
-body, err := res.Json()
+str, err := res.Export()
 if err != nil {
    return
+}
+```
+
+Unmarshal JSON
+```go
+var u User
+err := res.Json(&u)
+if err != nil {
+   return err
+}
+
+var m map[string]interface{}
+err := res.Json(&m)
+if err != nil {
+   return err
 }
 ```
 

@@ -12,6 +12,7 @@ type Response struct {
 	time int64
 	url  string
 	resp *http.Response
+	body []byte
 }
 
 func (r *Response) Response() *http.Response {
@@ -35,10 +36,10 @@ func (r *Response) Url() string {
 
 func (r *Response) Headers() map[string]string {
 	headers := make(map[string]string)
-	for k,v:=range r.resp.Header{
-		if len(v)>0{
+	for k, v := range r.resp.Header {
+		if len(v) > 0 {
 			headers[k] = v[len(v)-1]
-		}else{
+		} else {
 			headers[k] = ""
 		}
 	}
@@ -48,6 +49,10 @@ func (r *Response) Headers() map[string]string {
 func (r *Response) Body() ([]byte, error) {
 	defer r.resp.Body.Close()
 
+	if len(r.body) > 0 {
+		return r.body, nil
+	}
+
 	if r.resp == nil || r.resp.Body == nil {
 		return nil, errors.New("response or body is nil")
 	}
@@ -56,28 +61,34 @@ func (r *Response) Body() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+	r.body = b
 
 	return b, nil
 }
 
-func (r *Response) Json() (string, error) {
-	defer r.resp.Body.Close()
-
-	if r.resp == nil || r.resp.Body == nil {
-		return "", errors.New("response or body is nil")
+func (r *Response) Json(v interface{}) error {
+	b, err := r.Body()
+	if err != nil {
+		return err
 	}
 
-	b, err := ioutil.ReadAll(r.resp.Body)
+	if err := json.Unmarshal(b, &v); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *Response) Export() (string, error) {
+	b, err := r.Body()
 	if err != nil {
 		return "", err
 	}
 
 	var i interface{}
-
-	err = json.Unmarshal(b, &i)
-	if err != nil {
+	if err := json.Unmarshal(b, &i); err != nil {
 		return "", errors.New("illegal json: " + err.Error())
 	}
 
-	return Json(i), nil
+	return Export(i), nil
 }
