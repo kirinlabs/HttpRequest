@@ -66,6 +66,14 @@ func (r *Response) Body() ([]byte, error) {
 	return b, nil
 }
 
+func (r *Response) Content() (string, error) {
+	b, err := r.Body()
+	if err != nil {
+		return "", nil
+	}
+	return string(b), nil
+}
+
 func (r *Response) Json(v interface{}) error {
 	b, err := r.Body()
 	if err != nil {
