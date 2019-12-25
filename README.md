@@ -72,7 +72,7 @@ res,err := HttpRequest.NewRequest().Get("http://127.0.0.1")
 
 ### GET
 
-Query parameter
+#### Query parameter
 ```go
 res, err := req.Get("http://127.0.0.1:8000")
 res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest")
@@ -84,7 +84,7 @@ res, err := HttpRequest.Debug(true).SetHeaders(map[string]string{}).Get("http://
 ```
 
 
-Multi parameter,url will be rebuild to `http://127.0.0.1:8000?id=10&title=HttpRequest&name=jason&score=100`
+#### Multi parameter,url will be rebuild to `http://127.0.0.1:8000?id=10&title=HttpRequest&name=jason&score=100`
 ```go
 res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest",map[string]interface{}{
     "name":  "jason",
@@ -136,13 +136,13 @@ return string(body)
 
 
 ### Debug
-Default false
+#### Default false
 
 ```go
 req.Debug(true)
 ```
 
-Print in standard output：
+#### Print in standard output：
 ```go
 [HttpRequest]
 -------------------------------------------------------------------
@@ -158,7 +158,7 @@ ReqBody: map[age:19 score:100]
 ## Json
 Post JSON request
 
-Set header
+#### Set header
 ```go
  req.SetHeaders(map[string]string{"Content-Type": "application/json"})
 ```
@@ -172,7 +172,7 @@ req.JSON().Post("http://127.0.0.1:8000", map[string]interface{}{
 req.JSON().Post("http://127.0.0.1:8000", "{\"title\":\"github\",\"id\":10}")
 ```
 
-Post request
+#### Post request
 ```go
 res, err := req.Post("http://127.0.0.1:8000", map[string]interface{}{
     "id":    10,
@@ -180,7 +180,7 @@ res, err := req.Post("http://127.0.0.1:8000", map[string]interface{}{
 })
 ```
 
-Print formatted JSON
+#### Print formatted JSON
 ```go
 str, err := res.Export()
 if err != nil {
@@ -188,7 +188,7 @@ if err != nil {
 }
 ```
 
-Unmarshal JSON
+#### Unmarshal JSON
 ```go
 var u User
 err := res.Json(&u)
@@ -205,28 +205,28 @@ if err != nil {
 
 ### Response
 
-Response() *http.Response
+#### Response() *http.Response
 ```go
 res, err := req.Post("http://127.0.0.1:8000/") //res is a http.Response object
 ```
 
-StatusCode() int
+#### StatusCode() int
 ```go
 res.StatusCode()
 ```
 
-Body() ([]byte, error)
+#### Body() ([]byte, error)
 ```go
 body, err := res.Body()
 log.Println(string(body))
 ```
 
-Time() string
+#### Time() string
 ```go
 res.Time()  //ms
 ```
 
-Print formatted JSON
+#### Print formatted JSON
 ```go
 str, err := res.Export()
 if err != nil {
@@ -234,7 +234,7 @@ if err != nil {
 }
 ```
 
-Unmarshal JSON
+#### Unmarshal JSON
 ```go
 var u User
 err := res.Json(&u)
@@ -249,19 +249,19 @@ if err != nil {
 }
 ```
 
-Url() string
+#### Url() string
 ```go
 res.Url()  //return the requested url
 ```
 
-Headers() map[string]string
+#### Headers() map[string]string
 ```go
 res.Headers()  //return the response headers
 ```
 
 
 ### Advanced
-GET
+#### GET
 ```go
 import "github.com/kirinlabs/HttpRequest"
    
@@ -271,7 +271,7 @@ res,err := HttpRequest.Get("http://127.0.0.1:8000/?title=github")
 res,err := HttpRequest.Debug(true).JSON().Get("http://127.0.0.1:8000/")
 ```
 
-POST
+#### POST
 ```go
 import "github.com/kirinlabs/HttpRequest"
    
