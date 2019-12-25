@@ -25,6 +25,8 @@ type Request struct {
 	timeout           time.Duration
 	headers           map[string]string
 	cookies           map[string]string
+	username          string
+	password          string
 	data              interface{}
 	disableKeepAlives bool
 	tlsClientConfig   *tls.Config
@@ -103,6 +105,19 @@ func (r *Request) initCookies(req *http.Request) {
 			Name:  k,
 			Value: v,
 		})
+	}
+}
+
+// Set basic auth
+func (r *Request) SetBasicAuth(username, password string) *Request {
+	r.username = username
+	r.password = password
+	return r
+}
+
+func (r *Request) initBasicAuth(req *http.Request) {
+	if r.username != "" && r.password != "" {
+		req.SetBasicAuth(r.username, r.password)
 	}
 }
 
@@ -326,6 +341,7 @@ func (r *Request) request(method, url string, data ...interface{}) (*Response, e
 
 	r.initHeaders(req)
 	r.initCookies(req)
+	r.initBasicAuth(req)
 
 	resp, err := r.cli.Do(req)
 
@@ -394,6 +410,7 @@ func (r *Request) sendFile(url, filename, fileinput string) (*Response, error) {
 
 	r.initHeaders(req)
 	r.initCookies(req)
+	r.initBasicAuth(req)
 	req.Header.Set("Content-Type", contentType)
 
 	resp, err := r.cli.Do(req)

@@ -10,23 +10,23 @@ go get github.com/kirinlabs/HttpRequest
 
 ### How do we use HttpRequest?
 
-Create request object
+#### Create request object
 ```go
 req := HttpRequest.NewRequest()
 req := HttpRequest.NewRequest().Debug(true).DisableKeepAlives(false).SetTimeout(5)
 ```
 
-Keep Alives
+#### Keep Alives
 ```go
 req.DisableKeepAlives(false)
 ```
 
-Ignore Https certificate validation
+#### Ignore Https certificate validation
 ```go
 req.SetTLSClient(&tls.Config{InsecureSkipVerify: true})
 ```
 
-Set headers
+#### Set headers
 ```go
 req.SetHeaders(map[string]string{
     "Content-Type": "application/x-www-form-urlencoded",
@@ -38,7 +38,7 @@ req.SetHeaders(map[string]string{
 })
 ```
 
-Set cookies
+#### Set cookies
 ```go
 req.SetCookies(map[string]string{
     "name":"json",
@@ -50,12 +50,17 @@ req.SetCookies(map[string]string{
 })
 ```
 
-Set timeout
+#### Set basic auth
+```go
+req.SetBasicAuth("username","password")
+```
+
+#### Set timeout
 ```go
 req.SetTimeout(5)  //default 30s
 ```
 
-Object-oriented operation mode
+#### Object-oriented operation mode
 ```go
 req := HttpRequest.NewRequest().
 	Debug(true).

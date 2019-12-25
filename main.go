@@ -40,6 +40,11 @@ func SetCookies(cookies map[string]string) *Request {
 	return r.SetCookies(cookies)
 }
 
+func SetBasicAuth(username, password string) *Request {
+	r := NewRequest()
+	return r.SetBasicAuth(username, password)
+}
+
 func JSON() *Request {
 	r := NewRequest()
 	return r.JSON()
