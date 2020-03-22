@@ -87,6 +87,10 @@ func (r *Response) Json(v interface{}) error {
 	return nil
 }
 
+func (r *Response) Close() error {
+	return r.resp.Body.Close()
+}
+
 func (r *Response) Export() (string, error) {
 	b, err := r.Body()
 	if err != nil {
