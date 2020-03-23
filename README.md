@@ -221,6 +221,11 @@ body, err := res.Body()
 log.Println(string(body))
 ```
 
+#### Close() error
+```go
+res.Close()
+```
+
 #### Time() string
 ```go
 res.Time()  //ms
