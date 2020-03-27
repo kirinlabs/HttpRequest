@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"mime/multipart"
 	"net"
 	"net/http"
@@ -344,7 +343,6 @@ func (r *Request) request(method, url string, data ...interface{}) (*Response, e
 		body io.Reader
 	)
 	r.cli = r.buildClient()
-	log.Println(r.cli.Transport)
 
 	method = strings.ToUpper(method)
 	r.method = method
