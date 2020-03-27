@@ -84,7 +84,7 @@ res, err := HttpRequest.Debug(true).SetHeaders(map[string]string{}).Get("http://
 ```
 
 
-#### Multi parameter,url will be rebuild to `http://127.0.0.1:8000?id=10&title=HttpRequest&name=jason&score=100`
+#### Multi parameter
 ```go
 res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest",map[string]interface{}{
     "name":  "jason",
