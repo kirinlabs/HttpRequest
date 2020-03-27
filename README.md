@@ -131,9 +131,7 @@ j.SetCookies(&url.URL{
 	&http.Cookie{Name: "identity-user", Value: "83df5154d0ed31d166f5c54ddc"},
 	&http.Cookie{Name: "token_id", Value: "JSb99d0e7d809610186813583b4f802a37b99d"},
 })
-res, err := HttpRequest.SetHeaders(map[string]string{
-		"x-api-env": "debug",
-	}).Jar(j).Get("http://127.0.0.1:8000/city/list")
+res, err := HttpRequest.Jar(j).Get("http://127.0.0.1:8000/city/list")
 defer res.Close()
 if err != nil {
 	log.Fatalf("Request error：%v", err.Error())
