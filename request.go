@@ -54,10 +54,6 @@ func (r *Request) SetTLSClient(v *tls.Config) *Request {
 	return r
 }
 
-func (r *Request) TLSClient(v *tls.Config) *Request {
-	return r.SetTLSClient(v)
-}
-
 // Debug model
 func (r *Request) Debug(v bool) *Request {
 	r.debug = v

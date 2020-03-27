@@ -2,6 +2,7 @@ package HttpRequest
 
 import (
 	"crypto/tls"
+	"net/http"
 	"time"
 )
 
@@ -20,9 +21,24 @@ func Debug(v bool) *Request {
 	return r.Debug(v)
 }
 
+func Jar(v http.CookieJar) *Request {
+	r := NewRequest()
+	return r.Jar(v)
+}
+
 func DisableKeepAlives(v bool) *Request {
 	r := NewRequest()
 	return r.DisableKeepAlives(v)
+}
+
+func CheckRedirect(v func(req *http.Request, via []*http.Request) error) *Request {
+	r := NewRequest()
+	return r.CheckRedirect(v)
+}
+
+func TLSClient(v *tls.Config) *Request {
+	r := NewRequest()
+	return r.SetTLSClient(v)
 }
 
 func SetTLSClient(v *tls.Config) *Request {

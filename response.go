@@ -34,16 +34,18 @@ func (r *Response) Url() string {
 	return r.url
 }
 
-func (r *Response) Headers() map[string]string {
-	headers := make(map[string]string)
-	for k, v := range r.resp.Header {
-		if len(v) > 0 {
-			headers[k] = v[len(v)-1]
-		} else {
-			headers[k] = ""
-		}
+func (r *Response) Headers() http.Header {
+	if r != nil {
+		return r.resp.Header
 	}
-	return headers
+	return nil
+}
+
+func (r *Response) Cookies() []*http.Cookie {
+	if r != nil {
+		return r.resp.Cookies()
+	}
+	return []*http.Cookie{}
 }
 
 func (r *Response) Body() ([]byte, error) {
@@ -75,6 +77,10 @@ func (r *Response) Content() (string, error) {
 }
 
 func (r *Response) Json(v interface{}) error {
+	return r.Unmarshal(v)
+}
+
+func (r *Response) Unmarshal(v interface{}) error {
 	b, err := r.Body()
 	if err != nil {
 		return err
