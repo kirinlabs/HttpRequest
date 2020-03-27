@@ -30,6 +30,8 @@ type Request struct {
 	data              interface{}
 	disableKeepAlives bool
 	tlsClientConfig   *tls.Config
+	jar               http.CookieJar
+	checkRedirect     func(req *http.Request, via []*http.Request) error
 }
 
 func (r *Request) DisableKeepAlives(v bool) *Request {
@@ -37,9 +39,23 @@ func (r *Request) DisableKeepAlives(v bool) *Request {
 	return r
 }
 
+func (r *Request) Jar(v http.CookieJar) *Request {
+	r.jar = v
+	return r
+}
+
+func (r *Request) CheckRedirect(v func(req *http.Request, via []*http.Request) error) *Request {
+	r.checkRedirect = v
+	return r
+}
+
 func (r *Request) SetTLSClient(v *tls.Config) *Request {
 	r.tlsClientConfig = v
 	return r
+}
+
+func (r *Request) TLSClient(v *tls.Config) *Request {
+	return r.SetTLSClient(v)
 }
 
 // Debug model
@@ -65,6 +81,9 @@ func (r *Request) buildClient() *http.Client {
 				TLSClientConfig:       r.tlsClientConfig,
 				DisableKeepAlives:     r.disableKeepAlives,
 			},
+			Jar:           r.jar,
+			CheckRedirect: r.checkRedirect,
+			Timeout:       time.Second * r.timeout,
 		}
 	}
 	return r.cli
