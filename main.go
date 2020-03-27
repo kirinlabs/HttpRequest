@@ -3,6 +3,7 @@ package HttpRequest
 import (
 	"crypto/tls"
 	"net/http"
+	"net/url"
 	"time"
 )
 
@@ -64,6 +65,11 @@ func SetBasicAuth(username, password string) *Request {
 func JSON() *Request {
 	r := NewRequest()
 	return r.JSON()
+}
+
+func Proxy(v func(*http.Request) (*url.URL, error)) *Request {
+	r := NewRequest()
+	return r.Proxy(v)
 }
 
 func SetTimeout(d time.Duration) *Request {
