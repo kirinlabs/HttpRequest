@@ -121,6 +121,24 @@ res, err := HttpRequest.JSON().Post("http://127.0.0.1:8000",map[string]interface
 res, err := HttpRequest.Debug(true).SetHeaders(map[string]string{}).JSON().Post("http://127.0.0.1:8000","{\"title\":\"github\"}")
 ```
 
+### Jar
+```go
+j, _ := cookiejar.New(nil)
+j.SetCookies(&url.URL{
+	Scheme: "http",
+	Host:   "www.localhost.com",
+}, []*http.Cookie{
+	&http.Cookie{Name: "identity-user", Value: "83df5154d0ed31d166f5c54ddc"},
+	&http.Cookie{Name: "token_id", Value: "JSb99d0e7d809610186813583b4f802a37b99d"},
+})
+res, err := HttpRequest.SetHeaders(map[string]string{
+		"x-api-env": "debug",
+	}).Jar(j).Get("http://www.localhost.com/city/list")
+defer res.Close()
+if err != nil {
+	log.Fatalf("Request error：%v", err.Error())
+}
+```
 
 ### Upload
 Params: url, filename, fileinput
