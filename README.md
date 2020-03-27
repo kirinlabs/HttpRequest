@@ -259,11 +259,15 @@ if err != nil {
 res.Url()  //return the requested url
 ```
 
-#### Headers() map[string]string
+#### Headers() http.Header
 ```go
 res.Headers()  //return the response headers
 ```
 
+#### Cookies() []*http.Cookie
+```go
+res.Cookies()  //return the response cookies
+```
 
 ### Advanced
 #### GET
