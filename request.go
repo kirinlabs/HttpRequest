@@ -53,8 +53,17 @@ func (r *Request) CheckRedirect(v func(req *http.Request, via []*http.Request) e
 	return r
 }
 
+func (r *Request) TLSClient(v *tls.Config) *Request {
+	return r.SetTLSClient(v)
+}
+
 func (r *Request) SetTLSClient(v *tls.Config) *Request {
 	r.tlsClientConfig = v
+	return r
+}
+
+func (r *Request) Proxy(v func(*http.Request) (*url.URL, error)) *Request {
+	r.proxy = v
 	return r
 }
 
@@ -70,14 +79,10 @@ func (r *Request) buildClient() *http.Client {
 		r.cli = &http.Client{
 			Transport: &http.Transport{
 				Proxy: r.proxy,
-				Dial: func(network, addr string) (net.Conn, error) {
-					conn, err := net.DialTimeout(network, addr, time.Second*r.timeout)
-					if err != nil {
-						return nil, err
-					}
-					conn.SetDeadline(time.Now().Add(time.Second * r.timeout))
-					return conn, nil
-				},
+				Dial: (&net.Dialer{
+					Timeout:  r.timeout * time.Second,
+					Deadline: time.Now().Add(time.Second * r.timeout),
+				}).Dial,
 				DialContext: (&net.Dialer{
 					Timeout:  r.timeout * time.Second,
 					Deadline: time.Now().Add(time.Second * r.timeout),
@@ -370,7 +375,6 @@ func (r *Request) request(method, url string, data ...interface{}) (*Response, e
 	r.initBasicAuth(req)
 
 	resp, err := r.cli.Do(req)
-
 	if err != nil {
 		return nil, err
 	}
