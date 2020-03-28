@@ -138,6 +138,25 @@ if err != nil {
 }
 ```
 
+### Proxy
+```go
+proxy, err := url.Parse("http://proxyip:proxyport")
+if err != nil {
+	log.Println(err)
+}
+
+res, err := HttpRequest.Proxy(http.ProxyURL(proxy)).Get("http://127.0.0.1:8000/ip")
+defer res.Close()
+if err != nil {
+	log.Println("Request error：%v", err.Error())
+}
+body, err := res.Body()
+if err != nil {
+	log.Println("Get body error：%v", err.Error())
+}
+log.Println(string(body))
+```
+
 ### Upload
 Params: url, filename, fileinput
 
