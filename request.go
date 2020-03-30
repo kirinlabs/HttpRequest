@@ -81,10 +81,17 @@ func (r *Request) getTransport() http.RoundTripper {
 	if r.transport == nil {
 		return http.DefaultTransport
 	}
+
 	r.transport.DisableKeepAlives = r.disableKeepAlives
+
 	if r.tlsClientConfig != nil {
 		r.transport.TLSClientConfig = r.tlsClientConfig
 	}
+
+	if r.proxy != nil {
+		r.transport.Proxy = r.proxy
+	}
+
 	return http.RoundTripper(r.transport)
 }
 
