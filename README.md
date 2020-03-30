@@ -10,20 +10,10 @@ go get github.com/kirinlabs/HttpRequest
 
 ### How do we use HttpRequest?
 
-#### Create request object
+#### Create request object use http.DefaultTransport
 ```go
 req := HttpRequest.NewRequest()
-req := HttpRequest.NewRequest().Debug(true).DisableKeepAlives(false).SetTimeout(5)
-```
-
-#### Keep Alives
-```go
-req.DisableKeepAlives(false)
-```
-
-#### Ignore Https certificate validation
-```go
-req.SetTLSClient(&tls.Config{InsecureSkipVerify: true})
+req := HttpRequest.NewRequest().Debug(true).SetTimeout(5)
 ```
 
 #### Set headers
@@ -58,6 +48,39 @@ req.SetBasicAuth("username","password")
 #### Set timeout
 ```go
 req.SetTimeout(5)  //default 30s
+```
+
+#### Transport
+If you want to customize the Client object and reuse TCP connections, you need to define a global http.RoundTripper or & http.Transport, because the reuse of the http connection pool is based on Transport.
+```go
+var transport *http.Transport
+func init() {   
+    transport = &http.Transport{
+        DialContext: (&net.Dialer{
+            Timeout:   30 * time.Second,
+            KeepAlive: 30 * time.Second,
+            DualStack: true,
+        }).DialContext,
+        MaxIdleConns:          100,
+    }
+}
+
+func demo(){
+    // Use http.DefaultTransport
+    res, err := HttpRequest.Get("http://127.0.0.1:8080")
+    // Use custom Transport
+    res, err := HttpRequest.Transport(transport).Get("http://127.0.0.1:8080")
+}
+```
+
+#### Keep Alives，Only effective for custom Transport
+```go
+req.DisableKeepAlives(false)
+```
+
+#### Ignore Https certificate validation，Only effective for custom Transport
+```go
+req.SetTLSClient(&tls.Config{InsecureSkipVerify: true})
 ```
 
 #### Object-oriented operation mode

@@ -77,6 +77,11 @@ func SetTimeout(d time.Duration) *Request {
 	return r.SetTimeout(d)
 }
 
+func Transport(v *http.Transport) *Request {
+	r := NewRequest()
+	return r.Transport(v)
+}
+
 // Get is a get http request
 func Get(url string, data ...interface{}) (*Response, error) {
 	r := NewRequest()

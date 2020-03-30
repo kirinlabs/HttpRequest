@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"io"
 	"mime/multipart"
-	"net"
 	"net/http"
 	"net/url"
 	"os"
@@ -18,24 +17,23 @@ import (
 )
 
 type Request struct {
-	cli                 *http.Client
-	debug               bool
-	url                 string
-	method              string
-	time                int64
-	timeout             time.Duration
-	headers             map[string]string
-	cookies             map[string]string
-	username            string
-	password            string
-	data                interface{}
-	disableKeepAlives   bool
-	tlsClientConfig     *tls.Config
-	jar                 http.CookieJar
-	proxy               func(*http.Request) (*url.URL, error)
-	checkRedirect       func(req *http.Request, via []*http.Request) error
-	maxIdleConns        int
-	maxIdleConnsPerHost int
+	cli               *http.Client
+	transport         *http.Transport
+	debug             bool
+	url               string
+	method            string
+	time              int64
+	timeout           time.Duration
+	headers           map[string]string
+	cookies           map[string]string
+	username          string
+	password          string
+	data              interface{}
+	disableKeepAlives bool
+	tlsClientConfig   *tls.Config
+	jar               http.CookieJar
+	proxy             func(*http.Request) (*url.URL, error)
+	checkRedirect     func(req *http.Request, via []*http.Request) error
 }
 
 func (r *Request) DisableKeepAlives(v bool) *Request {
@@ -67,32 +65,34 @@ func (r *Request) Proxy(v func(*http.Request) (*url.URL, error)) *Request {
 	return r
 }
 
+func (r *Request) Transport(v *http.Transport) *Request {
+	r.transport = v
+	return r
+}
+
 // Debug model
 func (r *Request) Debug(v bool) *Request {
 	r.debug = v
 	return r
 }
 
+// Get transport
+func (r *Request) getTransport() http.RoundTripper {
+	if r.transport == nil {
+		return http.DefaultTransport
+	}
+	r.transport.DisableKeepAlives = r.disableKeepAlives
+	if r.tlsClientConfig != nil {
+		r.transport.TLSClientConfig = r.tlsClientConfig
+	}
+	return http.RoundTripper(r.transport)
+}
+
 // Build client
 func (r *Request) buildClient() *http.Client {
 	if r.cli == nil {
 		r.cli = &http.Client{
-			Transport: &http.Transport{
-				Proxy: r.proxy,
-				Dial: (&net.Dialer{
-					Timeout:  r.timeout * time.Second,
-					Deadline: time.Now().Add(time.Second * r.timeout),
-				}).Dial,
-				DialContext: (&net.Dialer{
-					Timeout:  r.timeout * time.Second,
-					Deadline: time.Now().Add(time.Second * r.timeout),
-				}).DialContext,
-				MaxIdleConns:          r.maxIdleConns,
-				MaxIdleConnsPerHost:   r.maxIdleConnsPerHost,
-				ResponseHeaderTimeout: time.Second * r.timeout,
-				TLSClientConfig:       r.tlsClientConfig,
-				DisableKeepAlives:     r.disableKeepAlives,
-			},
+			Transport:     r.getTransport(),
 			Jar:           r.jar,
 			CheckRedirect: r.checkRedirect,
 			Timeout:       time.Second * r.timeout,
