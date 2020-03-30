@@ -76,7 +76,7 @@ func demo(){
 #### Keep Alives，Only effective for custom Transport
 ```go
 req.DisableKeepAlives(false)
-HttpRequest.Transport(transport).DisableKeepAlives(false).Get("http://127.0.0.1:8080")
+res, err := HttpRequest.Transport(transport).DisableKeepAlives(false).Get("http://127.0.0.1:8080")
 ```
 
 #### Ignore Https certificate validation，Only effective for custom Transport
