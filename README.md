@@ -61,7 +61,10 @@ func init() {
             KeepAlive: 30 * time.Second,
             DualStack: true,
         }).DialContext,
-        MaxIdleConns:          100,
+        MaxIdleConns:          100, 
+        IdleConnTimeout:       90 * time.Second,
+        TLSHandshakeTimeout:   5 * time.Second,
+        ExpectContinueTimeout: 1 * time.Second,
     }
 }
 
