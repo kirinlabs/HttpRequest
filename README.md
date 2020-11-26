@@ -129,14 +129,27 @@ return string(body)
 ### POST
 
 ```go
-resp, err := req.Post("http://127.0.0.1:8000")
-resp, err := req.Post("http://127.0.0.1:8000", 100)
-resp, err := req.Post("http://127.0.0.1:8000", []byte("bytes data"))
-resp, err := req.Post("http://127.0.0.1:8000", bytes.NewReader(buf []byte))
-resp, err := req.Post("http://127.0.0.1:8000", strings.NewReader(buf []byte))
-resp, err := req.Post("http://127.0.0.1:8000", bytes.NewBuffer(buf []byte))
-resp, err := req.Post("http://127.0.0.1:8000", "title=github&type=1")
-resp, err := req.JSON().Post("http://127.0.0.1:8000", "{\"id\":10,\"title\":\"HttpRequest\"}")
+// Send nil
+resp, err := HttpRequest.Post("http://127.0.0.1:8000")
+
+// Send integer
+resp, err := HttpRequest.Post("http://127.0.0.1:8000", 100)
+
+// Send []byte
+resp, err := HttpRequest.Post("http://127.0.0.1:8000", []byte("bytes data"))
+
+// Send io.Reader
+resp, err := HttpRequest.Post("http://127.0.0.1:8000", bytes.NewReader(buf []byte))
+resp, err := HttpRequest.Post("http://127.0.0.1:8000", strings.NewReader(buf []byte))
+resp, err := HttpRequest.Post("http://127.0.0.1:8000", bytes.NewBuffer(buf []byte))
+
+// Send string
+resp, err := HttpRequest.Post("http://127.0.0.1:8000", "title=github&type=1")
+
+// Send JSON
+resp, err := HttpRequest.JSON().Post("http://127.0.0.1:8000", "{\"id\":10,\"title\":\"HttpRequest\"}")
+
+// Send map[string]interface{}{}
 resp, err := req.Post("http://127.0.0.1:8000", map[string]interface{}{
     "id":    10,
     "title": "HttpRequest",
