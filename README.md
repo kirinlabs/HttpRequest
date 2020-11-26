@@ -327,6 +327,7 @@ res.Url()  //return the requested url
 #### Headers() http.Header
 ```go
 res.Headers()  //return the response headers
+resp.Headers().Get("Content-Type")
 ```
 
 #### Cookies() []*http.Cookie
