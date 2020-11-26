@@ -178,30 +178,36 @@ func (r *Request) JSON() *Request {
 
 // Build query data
 func (r *Request) buildBody(d ...interface{}) (io.Reader, error) {
-	// GET and DELETE request dose not send body
-	if r.method == "GET" || r.method == "DELETE" {
+	if r.method == "GET" || r.method == "DELETE" || len(d) == 0 || (len(d) > 0 && d[0] == nil) {
 		return nil, nil
 	}
 
-	if len(d) == 0 || d[0] == nil {
-		return strings.NewReader(""), nil
+	switch d[0].(type) {
+	case string:
+		return strings.NewReader(d[0].(string)), nil
+	case []byte:
+		return bytes.NewReader(d[0].([]byte)), nil
+	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
+		return bytes.NewReader(IntByte(d[0])), nil
+	case *bytes.Reader:
+		return d[0].(*bytes.Reader), nil
+	case *strings.Reader:
+		return d[0].(*strings.Reader), nil
+	case *bytes.Buffer:
+		return d[0].(*bytes.Buffer), nil
+	default:
+		if r.isJson() {
+			b, err := json.Marshal(d[0])
+			if err != nil {
+				return nil, err
+			}
+			return bytes.NewReader(b), nil
+		}
 	}
 
 	t := reflect.TypeOf(d[0]).String()
-	if t != "string" && !strings.Contains(t, "map[string]interface") {
-		return strings.NewReader(""), errors.New("incorrect parameter format.")
-	}
-
-	if t == "string" {
-		return strings.NewReader(d[0].(string)), nil
-	}
-
-	if r.isJson() {
-		if b, err := json.Marshal(d[0]); err != nil {
-			return nil, err
-		} else {
-			return bytes.NewReader(b), nil
-		}
+	if !strings.Contains(t, "map[string]interface") {
+		return nil, errors.New("Unsupported data type.")
 	}
 
 	data := make([]string, 0)
@@ -272,7 +278,7 @@ func buildUrl(url string, data ...interface{}) (string, error) {
 				query = append(query, param)
 			}
 		default:
-			return url, errors.New("incorrect parameter format.")
+			return url, errors.New("Unsupported data type.")
 		}
 
 	}
