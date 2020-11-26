@@ -95,6 +95,8 @@ req := HttpRequest.NewRequest().
 	SetHeaders(map[string]string{
 	    "Content-Type": "application/x-www-form-urlencoded",
 	}).SetTimeout(5)
+resp,err := req.Get("http://127.0.0.1")
+
 resp,err := HttpRequest.NewRequest().Get("http://127.0.0.1")
 ```
 
