@@ -53,6 +53,7 @@ func TestPostRequest(t *testing.T) {
 		int16(100),
 		int32(100),
 		int64(100),
+		"title=github&type=1",
 	}
 
 	var resp *Response

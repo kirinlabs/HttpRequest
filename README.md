@@ -100,8 +100,8 @@ res,err := HttpRequest.NewRequest().Get("http://127.0.0.1")
 #### Query parameter
 ```go
 res, err := req.Get("http://127.0.0.1:8000")
+res, err := req.Get("http://127.0.0.1:8000",nil)
 res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest")
-res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest",nil)
 res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest","address=beijing")
 
 res, err := HttpRequest.Get("http://127.0.0.1:8000")
@@ -129,6 +129,11 @@ return string(body)
 
 ```go
 res, err := req.Post("http://127.0.0.1:8000")
+res, err := req.Post("http://127.0.0.1:8000", 100)
+res, err := req.Post("http://127.0.0.1:8000", []byte("bytes data"))
+res, err := req.Post("http://127.0.0.1:8000", bytes.NewReader(buf []byte))
+res, err := req.Post("http://127.0.0.1:8000", strings.NewReader(buf []byte))
+res, err := req.Post("http://127.0.0.1:8000", bytes.NewBuffer(buf []byte))
 res, err := req.Post("http://127.0.0.1:8000", "title=github&type=1")
 res, err := req.JSON().Post("http://127.0.0.1:8000", "{\"id\":10,\"title\":\"HttpRequest\"}")
 res, err := req.Post("http://127.0.0.1:8000", map[string]interface{}{
