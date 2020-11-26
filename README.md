@@ -92,31 +92,32 @@ req := HttpRequest.NewRequest().
 	SetHeaders(map[string]string{
 	    "Content-Type": "application/x-www-form-urlencoded",
 	}).SetTimeout(5)
-res,err := HttpRequest.NewRequest().Get("http://127.0.0.1")
+resp,err := HttpRequest.NewRequest().Get("http://127.0.0.1")
 ```
 
 ### GET
 
 #### Query parameter
 ```go
-res, err := req.Get("http://127.0.0.1:8000")
-res, err := req.Get("http://127.0.0.1:8000",nil)
-res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest")
-res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest","address=beijing")
+resp, err := req.Get("http://127.0.0.1:8000")
+resp, err := req.Get("http://127.0.0.1:8000",nil)
+resp, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest")
+resp, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest","address=beijing")
 
-res, err := HttpRequest.Get("http://127.0.0.1:8000")
-res, err := HttpRequest.Debug(true).SetHeaders(map[string]string{}).Get("http://127.0.0.1:8000")
+resp, err := HttpRequest.Get("http://127.0.0.1:8000")
+resp, err := HttpRequest.Debug(true).SetHeaders(map[string]string{}).Get("http://127.0.0.1:8000")
 ```
 
 
 #### Multi parameter
 ```go
-res, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest",map[string]interface{}{
+resp, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest",map[string]interface{}{
     "name":  "jason",
     "score": 100,
 })
+defer resp.Close()
 
-body, err := res.Body()
+body, err := resp.Body()
 if err != nil {
     return
 }
@@ -128,27 +129,29 @@ return string(body)
 ### POST
 
 ```go
-res, err := req.Post("http://127.0.0.1:8000")
-res, err := req.Post("http://127.0.0.1:8000", 100)
-res, err := req.Post("http://127.0.0.1:8000", []byte("bytes data"))
-res, err := req.Post("http://127.0.0.1:8000", bytes.NewReader(buf []byte))
-res, err := req.Post("http://127.0.0.1:8000", strings.NewReader(buf []byte))
-res, err := req.Post("http://127.0.0.1:8000", bytes.NewBuffer(buf []byte))
-res, err := req.Post("http://127.0.0.1:8000", "title=github&type=1")
-res, err := req.JSON().Post("http://127.0.0.1:8000", "{\"id\":10,\"title\":\"HttpRequest\"}")
-res, err := req.Post("http://127.0.0.1:8000", map[string]interface{}{
+resp, err := req.Post("http://127.0.0.1:8000")
+resp, err := req.Post("http://127.0.0.1:8000", 100)
+resp, err := req.Post("http://127.0.0.1:8000", []byte("bytes data"))
+resp, err := req.Post("http://127.0.0.1:8000", bytes.NewReader(buf []byte))
+resp, err := req.Post("http://127.0.0.1:8000", strings.NewReader(buf []byte))
+resp, err := req.Post("http://127.0.0.1:8000", bytes.NewBuffer(buf []byte))
+resp, err := req.Post("http://127.0.0.1:8000", "title=github&type=1")
+resp, err := req.JSON().Post("http://127.0.0.1:8000", "{\"id\":10,\"title\":\"HttpRequest\"}")
+resp, err := req.Post("http://127.0.0.1:8000", map[string]interface{}{
     "id":    10,
     "title": "HttpRequest",
 })
-body, err := res.Body()
+defer resp.Close()
+
+body, err := resp.Body()
 if err != nil {
     return
 }
 return string(body)
 
-res, err := HttpRequest.Post("http://127.0.0.1:8000")
-res, err := HttpRequest.JSON().Post("http://127.0.0.1:8000",map[string]interface{}{"title":"github"})
-res, err := HttpRequest.Debug(true).SetHeaders(map[string]string{}).JSON().Post("http://127.0.0.1:8000","{\"title\":\"github\"}")
+resp, err := HttpRequest.Post("http://127.0.0.1:8000")
+resp, err := HttpRequest.JSON().Post("http://127.0.0.1:8000",map[string]interface{}{"title":"github"})
+resp, err := HttpRequest.Debug(true).SetHeaders(map[string]string{}).JSON().Post("http://127.0.0.1:8000","{\"title\":\"github\"}")
 ```
 
 ### Jar
@@ -163,6 +166,7 @@ j.SetCookies(&url.URL{
 })
 res, err := HttpRequest.Jar(j).Get("http://127.0.0.1:8000/city/list")
 defer res.Close()
+
 if err != nil {
 	log.Fatalf("Request error：%v", err.Error())
 }
@@ -177,9 +181,11 @@ if err != nil {
 
 res, err := HttpRequest.Proxy(http.ProxyURL(proxy)).Get("http://127.0.0.1:8000/ip")
 defer res.Close()
+
 if err != nil {
 	log.Println("Request error：%v", err.Error())
 }
+
 body, err := res.Body()
 if err != nil {
 	log.Println("Get body error：%v", err.Error())
