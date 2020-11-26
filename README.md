@@ -79,13 +79,15 @@ func demo(){
 #### Keep Alives，Only effective for custom Transport
 ```go
 req.DisableKeepAlives(false)
-res, err := HttpRequest.Transport(transport).DisableKeepAlives(false).Get("http://127.0.0.1:8080")
+
+HttpRequest.Transport(transport).DisableKeepAlives(false).Get("http://127.0.0.1:8080")
 ```
 
 #### Ignore Https certificate validation，Only effective for custom Transport
 ```go
 req.SetTLSClient(&tls.Config{InsecureSkipVerify: true})
-res, err := HttpRequest.Transport(transport).SetTLSClient(&tls.Config{InsecureSkipVerify: true}).Get("http://127.0.0.1:8080")
+
+HttpRequest.Transport(transport).SetTLSClient(&tls.Config{InsecureSkipVerify: true}).Get("http://127.0.0.1:8080")
 ```
 
 #### Object-oriented operation mode
