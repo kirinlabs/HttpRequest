@@ -140,7 +140,7 @@ resp, err := HttpRequest.Post("http://127.0.0.1:8000", []byte("bytes data"))
 
 // Send io.Reader
 resp, err := HttpRequest.Post("http://127.0.0.1:8000", bytes.NewReader(buf []byte))
-resp, err := HttpRequest.Post("http://127.0.0.1:8000", strings.NewReader(buf []byte))
+resp, err := HttpRequest.Post("http://127.0.0.1:8000", strings.NewReader("string data"))
 resp, err := HttpRequest.Post("http://127.0.0.1:8000", bytes.NewBuffer(buf []byte))
 
 // Send string
