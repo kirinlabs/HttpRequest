@@ -13,6 +13,7 @@ go get github.com/kirinlabs/HttpRequest
 #### Create request object use http.DefaultTransport
 ```go
 resp, err := HttpRequest.Get("http://127.0.0.1:8000")
+resp, err := HttpRequest.SetTimeout(5).Get("http://127.0.0.1:8000")
 resp, err := HttpRequest.Debug(true).SetHeaders(map[string]string{}).Get("http://127.0.0.1:8000")
 
 OR
