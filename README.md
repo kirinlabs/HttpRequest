@@ -46,9 +46,11 @@ req.SetCookies(map[string]string{
     "token":"",
 })
 
-req.SetCookies(map[string]string{
+OR
+
+HttpRequest.SetCookies(map[string]string{
     "age":"19",
-})
+}).Post()
 ```
 
 #### Set basic auth
@@ -121,6 +123,8 @@ resp, err := req.Get("http://127.0.0.1:8000")
 resp, err := req.Get("http://127.0.0.1:8000",nil)
 resp, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest")
 resp, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest","address=beijing")
+
+OR
 
 resp, err := HttpRequest.Get("http://127.0.0.1:8000")
 resp, err := HttpRequest.Debug(true).SetHeaders(map[string]string{}).Get("http://127.0.0.1:8000")
