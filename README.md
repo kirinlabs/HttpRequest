@@ -14,6 +14,15 @@ go get github.com/kirinlabs/HttpRequest
 ```go
 req := HttpRequest.NewRequest()
 req := HttpRequest.NewRequest().Debug(true).SetTimeout(5)
+resp, err := req.Get("http://127.0.0.1:8000")
+resp, err := req.Get("http://127.0.0.1:8000",nil)
+resp, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest")
+resp, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest","address=beijing")
+
+OR
+
+resp, err := HttpRequest.Get("http://127.0.0.1:8000")
+resp, err := HttpRequest.Debug(true).SetHeaders(map[string]string{}).Get("http://127.0.0.1:8000")
 ```
 
 #### Set headers
