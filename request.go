@@ -102,7 +102,7 @@ func (r *Request) buildClient() *http.Client {
 			Transport:     r.getTransport(),
 			Jar:           r.jar,
 			CheckRedirect: r.checkRedirect,
-			Timeout:       r.timeout,
+			Timeout:       time.Second * r.timeout,
 		}
 	}
 	return r.cli
