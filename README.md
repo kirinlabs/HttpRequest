@@ -1,6 +1,6 @@
 HttpRequest
 =======
-A simple `HTTP Request` package for golang. `GET` `POST` `DELETE` `PUT` `Upload`
+A simple `HTTP Request` package for golang. `GET` `POST` `DELETE` `PUT`
 
 
 
@@ -12,8 +12,19 @@ go get github.com/kirinlabs/HttpRequest
 
 #### Create request object use http.DefaultTransport
 ```go
+resp, err := HttpRequest.Get("http://127.0.0.1:8000")
+resp, err := HttpRequest.SetTimeout(5).Get("http://127.0.0.1:8000")
+resp, err := HttpRequest.Debug(true).SetHeaders(map[string]string{}).Get("http://127.0.0.1:8000")
+
+OR
+
 req := HttpRequest.NewRequest()
 req := HttpRequest.NewRequest().Debug(true).SetTimeout(5)
+resp, err := req.Get("http://127.0.0.1:8000")
+resp, err := req.Get("http://127.0.0.1:8000",nil)
+resp, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest")
+resp, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest","address=beijing")
+
 ```
 
 #### Set headers
@@ -35,9 +46,11 @@ req.SetCookies(map[string]string{
     "token":"",
 })
 
-req.SetCookies(map[string]string{
+OR
+
+HttpRequest.SetCookies(map[string]string{
     "age":"19",
-})
+}).Post()
 ```
 
 #### Set basic auth
@@ -110,6 +123,8 @@ resp, err := req.Get("http://127.0.0.1:8000")
 resp, err := req.Get("http://127.0.0.1:8000",nil)
 resp, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest")
 resp, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest","address=beijing")
+
+OR
 
 resp, err := HttpRequest.Get("http://127.0.0.1:8000")
 resp, err := HttpRequest.Debug(true).SetHeaders(map[string]string{}).Get("http://127.0.0.1:8000")
