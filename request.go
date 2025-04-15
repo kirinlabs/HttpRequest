@@ -300,7 +300,7 @@ func (r *Request) elapsedTime(n int64, resp *Response) {
 func (r *Request) log() {
 	if r.debug {
 		fmt.Printf("[HttpRequest]\n")
-		fmt.Printf("-------------------------------------------------------------------\n")
+		//fmt.Printf("-------------------------------------------------------------------\n")
 		fmt.Printf("Request: %s %s\nHeaders: %v\nCookies: %v\nTimeout: %ds\nReqBody: %v\n\n", r.method, r.url, r.headers, r.cookies, int64(r.timeout.Seconds()), r.data)
 		//fmt.Printf("-------------------------------------------------------------------\n\n")
 	}
