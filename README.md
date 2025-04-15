@@ -5,7 +5,9 @@ A simple `HTTP Request` package for golang. `GET` `POST` `DELETE` `PUT`
 
 
 ### Installation
+```
 go get github.com/kirinlabs/HttpRequest
+```
 
 
 ### How do we use HttpRequest?
