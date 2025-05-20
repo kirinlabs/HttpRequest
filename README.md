@@ -19,7 +19,7 @@ resp, err := HttpRequest.Debug(true).SetHeaders(map[string]string{}).Get("http:/
 OR
 
 req := HttpRequest.NewRequest()
-req := HttpRequest.NewRequest().Debug(true).SetTimeout(5)
+req := HttpRequest.NewRequest().Debug(true).SetTimeout(5*time.Second)
 resp, err := req.Get("http://127.0.0.1:8000")
 resp, err := req.Get("http://127.0.0.1:8000",nil)
 resp, err := req.Get("http://127.0.0.1:8000?id=10&title=HttpRequest")
