@@ -9,7 +9,7 @@ import (
 
 func NewRequest() *Request {
 	r := &Request{
-		timeout: 30,
+		timeout: 30 * time.Second,
 		headers: map[string]string{},
 		cookies: map[string]string{},
 	}
